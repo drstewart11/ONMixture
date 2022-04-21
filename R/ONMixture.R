@@ -199,7 +199,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
                 "N.total")
 
   #MCMC settings
-  nc=4; nt=1; nb=15000; ni=300000
+  nc=4; nt=1; nb=15000; ni=500000
 
   out<-jags(jags.data,jags.inits,parameters.to.save=jags.params,
             model.file=modelFilename,n.chains=nc,
@@ -372,7 +372,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
            "beta.algal","alpha.depth","alpha.temp","alpha.veg","sd_pond")
 
   #MCMC settings
-  nc=4; nt=1; nb=15000; ni=300000
+  nc=4; nt=1; nb=15000; ni=500000
 
   #Call JAGS
   out2<-jags(ndata,inits,parameters.to.save=params,model.file=modelFilename,n.chains=nc,
