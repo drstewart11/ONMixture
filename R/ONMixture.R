@@ -24,7 +24,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Reorganize count data by Site, Wetland Pond, Year, and Species
   if(species=="YCHUB"){
     newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                       ite=count$site,y=count$YCHUB)
+                       site=count$site,y=count$YCHUB)
     countdata<-newdat[order(newdat$year,newdat$pname,newdat$day,newdat$site),]
   }else if(species=="BSHINER"){
     newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
