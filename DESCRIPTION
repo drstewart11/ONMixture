@@ -1,0 +1,21 @@
+Package: ONMixture
+Type: Package
+Title: ONMixture: Open-population hierarchical Bayesian modeling function
+Version: 0.1.0
+Author: Dr. David R. Stewart
+Maintainer: <david_stewart@fws.gov>
+Description: ONMixture accompanies the San Bernardino National Wildlife Refuge
+    Rio Yaqui Fish Pond Sampling Protocol. It is fully automated, meaning that
+    the function runs two hierarchical Bayesian random effect models. The first
+    is an open population model that estimates population growth rate and
+    carrying capacity. The second model estimates abundance- and detection-
+    habitat relationships. Both tables and figures are produced and saved to
+    a persons working directory. Those tables and figures should be included
+    in the San Bernardino National Wildlife Refuge 5 year comprehensive 
+    report(s).
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/drstewart11/ONMixture
+Issues: https://github.com/drstewart11/ONMixture/issues
+RoxygenNote: 7.1.2
