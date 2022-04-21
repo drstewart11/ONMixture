@@ -135,8 +135,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   wdepth=scale(habdata$wdepth)
   wdepth=array(wdepth,c(nsite,npond,nyear))
 
-  print("Initiate Bayesian Population Model. This may take several
-        minutes to hours.",quote=FALSE)
+  print("Initiate Bayesian Population Model. This may take several minutes to hours.",quote=FALSE)
 
   modelFilename="david.stewart.bayes.ricker.txt"
   cat("
@@ -305,9 +304,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
            width=15,height=10,dpi=300)
   }
 
-  print("Bayesian Population Model Complete. Initiate JAGS model to assess
-        relationships with select habitat variables. This may take several
-        minutes to hours.",quote=FALSE)
+  print("Bayesian Population Model Complete. Initiate JAGS model to assess relationships with select habitat variables. This may take several minutes to hours.",quote=FALSE)
 
   #Define model file name and create JAGS model to assess relationships with
   #known habitat variables
@@ -532,7 +529,5 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
            height=9,dpi=300)
   }
   print("Results are saved and stored in your working directory.",quote=FALSE)
-  print("Consult with the Regional Statistician (Dr. David R. Stewart) and the
-        Regional Data Management Team once complete (if needed) or if you have
-        any concerns.")
+  print("Consult with the Regional Statistician (Dr. David R. Stewart) and the Regional Data Management Team once complete (if needed) or if you have any concerns.")
 }
