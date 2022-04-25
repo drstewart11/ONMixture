@@ -318,6 +318,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       beta.oxygen~dnorm(0,0.01)
       beta.cond~dnorm(0,0.01)
       beta.ntu~dnorm(0,0.01)
+      beta.ytopstock~dnorm(0,0.01)
+      beta.ychubstock~dnorm(0,0.01)
+      beta.bshinestock~dnorm(0,0.01)
+      beta.ytoprem~dnorm(0,0.01)
+      beta.ychubrem~dnorm(0,0.01)
+      beta.bshinerem~dnorm(0,0.01)
       #beta.algal~dnorm(0,0.01)
 
       #Detection parameters
@@ -342,7 +348,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       lambda[i,k,t]<-muL[i,k,t]*eta[i]
       log(muL[i,k,t])<-beta[k] + beta.depth*wdepth[i,k,t] +
       beta.oxygen*doxygen[i,k,t] + beta.cond*wcond[i,k,t] +
-      beta.ntu*ntu[i,k,t] 
+      beta.ntu*ntu[i,k,t] + beta.ytopstock*ytopstock[k,t] + beta.ychubstock*ychubstock[k,t] + beta.bshinestock*bshinestock[k,t] +
+      beta.ytoprem*ytoprem[k,t] + beta.ychubrem*ychubrem[k,t] + beta.bshinerem*bshinerem[k,t]
       }}}
 
       for(i in 1:nsite){
@@ -365,10 +372,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Bundle data
   ndata=list(y=y,nsite=nsite,nrep=nday,npond=npond,nyear=nyear,
              wdepth=wdepth,veg=veg,wtemp=wtemp,wcond=wcond,doxygen=doxygen,
-             ntu=ntu)
+             ntu=ntu,ytopstock=ytopstock,ychubstock=ychubstock,bshinestock=bshinestock,
+            ytoprem=ytoprem,ychubrem=ychubrem,bshinerem=bshinerem)
 
   #Parameters monitored
-  params=c("phi","beta","beta.depth","beta.oxygen","beta.cond","beta.ntu",
+  params=c("phi","beta","beta.depth","beta.oxygen","beta.cond","beta.ntu","beta.ytopstock","beta.ychubstock",
+           "beta.bshinestock","beta.ytoprem","beta.ychubrem","beta.bshinerem",
            "alpha.depth","alpha.temp","alpha.veg","sd_pond")
 
   #MCMC settings
@@ -448,12 +457,55 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Nalgal.upper<-round(unlist(out2$q97.5$beta.algal),2)
   #Nalgal.upper<-as.vector(Nalgal.upper)
 
-  N.mean<-c(N.depth,N.oxygen,N.cond,N.ntu)
-  N.lower<-c(NDepth.lower,Noxygen.lower,Ncond.lower,Nntu.lower)
-  N.upper<-c(NDepth.upper,Noxygen.upper,Ncond.upper,Nntu.upper)
+  N.ytopstock<-round(unlist(out2$mean$beta.ytopstock),2)
+  N.ytopstock<-as.vector(N.ytopstock)
+  Nytopstock.lower<-round(unlist(out2$q2.5$beta.ytopstock),2)
+  Nytopstock.lower<-as.vector(Nytopstock.lower)
+  Nytopstock.upper<-round(unlist(out2$q97.5$beta.ytopstock),2)
+  Nytopstock.upper<-as.vector(Nytopstock.upper)
+  
+  N.ychubstock<-round(unlist(out2$mean$beta.ychubstock),2)
+  N.ychubstock<-as.vector(N.ychubstock)
+  Nychubstock.lower<-round(unlist(out2$q2.5$beta.ychubstock),2)
+  Nychubstock.lower<-as.vector(Nychubstock.lower)
+  Nychubstock.upper<-round(unlist(out2$q97.5$beta.ychubstock),2)
+  Nychubstock.upper<-as.vector(Nychubstock.upper)
+  
+  N.bshinestock<-round(unlist(out2$mean$beta.bshinestock),2)
+  N.bshinestock<-as.vector(N.bshinestock)
+  Nbshinestock.lower<-round(unlist(out2$q2.5$beta.bshinestock),2)
+  Nbshinestock.lower<-as.vector(Nbshinestock.lower)
+  Nbshinestock.upper<-round(unlist(out2$q97.5$beta.bshinestock),2)
+  Nbshinestock.upper<-as.vector(Nbshinestock.upper)
+  
+  N.ytoprem<-round(unlist(out2$mean$beta.ytoprem),2)
+  N.ytoprem<-as.vector(N.ytoprem)
+  Nytoprem.lower<-round(unlist(out2$q2.5$beta.ytoprem),2)
+  Nytoprem.lower<-as.vector(Nytoprem.lower)
+  Nytoprem.upper<-round(unlist(out2$q97.5$beta.ytoprem),2)
+  Nytoprem.upper<-as.vector(Nytoprem.upper)
+  
+  N.ychubrem<-round(unlist(out2$mean$beta.ychubrem),2)
+  N.ychubrem<-as.vector(N.ychubrem)
+  Nychubrem.lower<-round(unlist(out2$q2.5$beta.ychubrem),2)
+  Nychubrem.lower<-as.vector(Nychubrem.lower)
+  Nychubrem.upper<-round(unlist(out2$q97.5$beta.ychubrem),2)
+  Nychubrem.upper<-as.vector(Nychubrem.upper)
+  
+  N.bshinerem<-round(unlist(out2$mean$beta.bshinerem),2)
+  N.bshinerem<-as.vector(N.bshinerem)
+  Nbshinerem.lower<-round(unlist(out2$q2.5$beta.bshinerem),2)
+  Nbshinerem.lower<-as.vector(Nbshinerem.lower)
+  Nbshinerem.upper<-round(unlist(out2$q97.5$beta.bshinerem),2)
+  Nbshinerem.upper<-as.vector(Nbshinerem.upper)
+  
+  N.mean<-c(N.depth,N.oxygen,N.cond,N.ntu,N.ytopstock,N.ychubstock,N.bshinestock,N.ytoprem,Nychubrem,N.bshinerem)
+  N.lower<-c(NDepth.lower,Noxygen.lower,Ncond.lower,Nntu.lower,Ntopstock.lower,Nychubstock.lower,Nbshinestock.lower,Nytoprem.lower,Nychubrem.lower,Nbshinerem.lower)
+  N.upper<-c(NDepth.upper,Noxygen.upper,Ncond.upper,Nntu.upper,Ntopstock.upper,Nychubstock.upper,Nbshinestock.upper,Nytoprem.upper,Nychurem.upper,Nbshinerem.upper)
   Variable<-c("Water Depth","Dissolved Oxygen","Water Conductivity",
-              "NTU")
-  Parameter<-rep(c("Abundance"),5)
+              "NTU","Yaqui Topminnow Stocked","Yaqui Chub Stocked","Beautiful Shiner Stocked",
+             "Yaqui Topminnow Removed","Yaqui Chub Removed","Beautiful Shiner Removed)
+  Parameter<-rep(c("Abundance"),10)
 
   res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
                      Mean=N.mean,Upper=N.upper)
