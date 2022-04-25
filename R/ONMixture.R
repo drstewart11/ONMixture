@@ -159,8 +159,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       log(muL[i,k])<-beta[k]
 
       for(t in 2:nyear){
-      #mu[i,k,t-1]<-N[i,k,t-1]*exp(r[k]*(1-(N[i,k,t-1]/K[k])))
-      mu[i,k,t-1]<-r[k]*N[i,k,t-1]*((K[k]-N[i,k,t-1])/K[k])
+      mu[i,k,t-1]<-N[i,k,t-1]*exp(r[k]*(1-(N[i,k,t-1]/K[k])))
+      #mu[i,k,t-1]<-r[k]*N[i,k,t-1]*((K[k]-N[i,k,t-1])/K[k])
       N[i,k,t]~dpois(mu[i,k,t-1])
       }
       }
@@ -169,11 +169,13 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       for(i in 1:nsite){
       for(j in 1:nrep){
       for(k in 1:npond){
+      alpha[i,j,k]~dnorm(0,0.5)
       for(t in 1:nyear){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
 
       #Detection probabilities
-      q[i,j,k,t]~dbeta(3,6) #Slightly informative prior
+      #q[i,j,k,t]~dbeta(3,6) #Slightly informative prior
+      logit(q[i,j,k,t])<-alpha[i,j,k]
       }}}}
 
       for(k in 1:npond){
@@ -182,7 +184,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       det.mean[k,t]<-mean(q[,,k,t])
       }
       }
-
 
       }",fill=TRUE,file=modelFilename)
 
