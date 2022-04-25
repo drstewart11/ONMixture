@@ -137,6 +137,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   print("Initiate Bayesian Population Model. This may take several minutes to hours.",quote=FALSE)
 
+  if(species=="YCHUB"){
   modelFilename="david.stewart.bayes.ricker.txt"
   cat("
       model{
@@ -186,7 +187,60 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       }
 
       }",fill=TRUE,file=modelFilename)
+}else if(species=="BSHINER"){
+     modelFilename="david.stewart.bayes.ricker.txt"
+  cat("
+      model{
 
+      phi~dunif(0,100)
+
+
+      for(k in 1:npond){
+      beta[k]~dnorm(0,0.01)
+      r[k]~dunif(0,5)
+      K[k]~dunif(0,1000)
+      eta[k]~dgamma(phi,phi)
+      }
+
+
+      for(i in 1:nsite){
+      for(k in 1:npond){
+      N[i,k,1]~dpois(lambda[i,k])
+      lambda[i,k]<-muL[i,k]*eta[k]
+      log(muL[i,k])<-beta[k]
+
+      for(t in 2:nyear){
+      mu[i,k,t-1]<-N[i,k,t-1]*exp(r[k]*(1-(N[i,k,t-1]/K[k])))
+      #mu[i,k,t-1]<-r[k]*N[i,k,t-1]*((K[k]-N[i,k,t-1])/K[k])
+      N[i,k,t]~dpois(mu[i,k,t-1])
+      }
+      }
+      }
+
+      for(i in 1:nsite){
+      for(j in 1:nrep){
+      for(k in 1:npond){
+      #alpha[i,j,k]~dnorm(0,0.5)
+      for(t in 1:nyear){
+      y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
+
+      #Detection probabilities
+      q[i,j,k,t]~dbeta(6,9) #Slightly informative prior
+      #logit(q[i,j,k,t])<-alpha[i,j,k]
+      }}}}
+
+      for(k in 1:npond){
+      for(t in 1:nyear){
+      N.total[k,t]<-sum(N[,k,t])
+      det.mean[k,t]<-mean(q[,,k,t])
+      }
+      }
+
+      }",fill=TRUE,file=modelFilename)
+    }
+    
+    
+    
   #Initial values
   Nst<-apply(y,c(1,3,4),sum,na.rm=T)+1
   jags.inits=function()list(N=Nst)
