@@ -149,7 +149,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       r[k]~dunif(0,5)
       K[k]~dunif(0,1000)
       eta[k]~dgamma(phi,phi)
-      shape[k]~dunif(0,20)
+      shape[k]~dunif(0,10)
       scale[k]~dunif(0,20)
       }
 
