@@ -169,13 +169,13 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       for(i in 1:nsite){
       for(j in 1:nrep){
       for(k in 1:npond){
-      alpha[i,j,k]~dnorm(0,0.5)
+      #alpha[i,j,k]~dnorm(0,0.5)
       for(t in 1:nyear){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
 
       #Detection probabilities
-      #q[i,j,k,t]~dbeta(3,6) #Slightly informative prior
-      logit(q[i,j,k,t])<-alpha[i,j,k]
+      q[i,j,k,t]~dbeta(2.5,6) #Slightly informative prior
+      #logit(q[i,j,k,t])<-alpha[i,j,k]
       }}}}
 
       for(k in 1:npond){
