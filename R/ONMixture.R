@@ -149,8 +149,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       r[k]~dunif(0,5)
       K[k]~dunif(0,1000)
       eta[k]~dgamma(phi,phi)
-      shape[k]~dunif(0,10)
-      scale[k]~dunif(0,20)
       }
 
 
@@ -175,7 +173,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
 
       #Detection probabilities
-      q[i,j,k,t]~dbeta(shape[k],scale[k])
+      q[i,j,k,t]~dbeta(3,6) #Slightly informative prior
       }}}}
 
       for(k in 1:npond){
