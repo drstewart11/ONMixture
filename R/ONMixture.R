@@ -597,6 +597,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       phi~dunif(0,100)
 
       #Abundance parameters
+      beta~dnorm(0,0.01)
       beta.ytoprem~dnorm(0,0.01)
       beta.ytopstock~dnorm(0,0.01)
       beta.ychubrem~dnorm(0,0.01)
