@@ -57,8 +57,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   mgmtdata<-newmgmt[order(newmgmt$year,newmgmt$pname),]
   
   #Expand data.frame
-  mgmtdat<-mgmtdata %>% group_by(pond_name,year,veg_removed,
-                              ychubrem,bshinerrem,ytoprem,ychubstock,bshinerstock,ytopstock) %>% expand(sites = 1:10)
+  mgmtdat<-mgmtdata %>% group_by(pname,year,ychubrem,bshinerrem,ytoprem,
+                                 ychubstock,bshinerstock,ytopstock) %>% expand(sites = 1:10)
 
   #Number of Yaqui chub removed
   ychubrem=scale(mgmtdat$ychubrem)
