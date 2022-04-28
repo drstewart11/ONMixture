@@ -602,8 +602,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       beta.ytopstock~dnorm(0,0.01)
       beta.ychubrem~dnorm(0,0.01)
       beta.ychubstock~dnorm(0,0.01)
-      beta.shinerem~dnorm(0,0.01)
-      beta.shinestock~dnorm(0,0.01)
+      beta.bshinerem~dnorm(0,0.01)
+      beta.bshinestock~dnorm(0,0.01)
 
       #Detection parameters
       for(k in 1:npond){
