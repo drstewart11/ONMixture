@@ -705,7 +705,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinerem.lower,Nbshinestock.lower)
   N.upper<-c(Nytopstock.upper,Nytoprem.upper,Nychubstock.upper,Nychubrem.upper,Nbshinestock.upper,Nbshinerem.upper)
   Variable<-c("Yaqui Topminnow Stocked","Yaqui Topminnow Removed","Yaqui Chub Stocked",
-             "Yaqui Chub Removed","Beautiful Shiner Stocked","Beautiful Shiner Removed)
+             "Yaqui Chub Removed","Beautiful Shiner Stocked","Beautiful Shiner Removed")
   Parameter<-rep(c("Abundance"),6)
 
   res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
