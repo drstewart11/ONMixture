@@ -611,7 +611,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       }
       mu.alpha~dnorm(0,0.01)
       tau.alpha~dgamma(0.1,0.1)
-      sd.pond<-1/tau.alpha
+      sd_pond<-1/tau.alpha
 
       for(i in 1:nsite){
       eta[i]~dgamma(phi,phi)
@@ -741,7 +741,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   if(species=="YCHUB"){
 
     #Capture and Write results to working directory (R Data Files)
-    write.csv(res2,"YaquiChubSHabitatParameters.csv",row.names=F)
+    write.csv(res2,"YaquiChubManagementParameters.csv",row.names=F)
 
     plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
       geom_point(size=4)+
@@ -758,11 +758,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank())
     print(plot)
-    ggsave("YaquiChubWetlandPondParameterFigure.tiff",plot=plot,
+    ggsave("YaquiChubWetlandManagementParameterFigure.tiff",plot=plot,
            width=9,height=7,dpi=300)
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
-    write.csv(res2,"BeautifulShinerHabitatParameters.csv",row.names=F)
+    write.csv(res2,"BeautifulShinerManagementParameters.csv",row.names=F)
 
     plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
       geom_point(size=4)+
@@ -779,7 +779,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank())
     print(plot)
-    ggsave("BeautifulShinerWetlandPondParameterFigure.tiff",plot=plot,width=7,
+    ggsave("BeautifulShinerWetlandManagementParameterFigure.tiff",plot=plot,width=7,
            height=9,dpi=300)
   }
   print("Results of the Management Model are saved and stored in your working directory.",quote=FALSE)
