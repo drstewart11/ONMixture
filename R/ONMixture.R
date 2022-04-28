@@ -151,7 +151,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       for(k in 1:npond){
       beta[k]~dnorm(0,0.01)
       r[k]~dunif(0,5)
-      K[k]~dunif(0,1000)
+      K[k]~dunif(0,5000)
       eta[k]~dgamma(phi,phi)
       }
 
@@ -201,7 +201,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       for(k in 1:npond){
       beta[k]~dnorm(0,0.01)
       r[k]~dunif(0,5)
-      K[k]~dunif(0,1000)
+      K[k]~dunif(0,5000)
       eta[k]~dgamma(phi,phi)
       }
 
