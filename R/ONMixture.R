@@ -779,8 +779,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank())
     print(plot)
-    ggsave("BeautifulShinerWetlandManagementParameterFigure.tiff",plot=plot,width=7,
-           height=9,dpi=300)
+    ggsave("BeautifulShinerWetlandManagementParameterFigure.tiff",plot=plot,width=9,
+           height=7,dpi=300)
   }
   print("Results of the Management Model are saved and stored in your working directory.",quote=FALSE)
 
