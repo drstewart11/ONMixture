@@ -228,7 +228,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
 
       #Detection probabilities
-      q[i,j,k,t]~dbeta(5,4) #Slightly informative prior
+      q[i,j,k,t]~dbeta(10,9) #Slightly informative prior
       #logit(q[i,j,k,t])<-alpha[i,j,k]
       }}}}
 
