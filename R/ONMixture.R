@@ -344,7 +344,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             strip.text.x=element_text(size=12))
     print(plot)
     ggsave("YaquiChubWetlandPondAbundanceFigure.tiff",plot=plot,
-           width=15,height=10,dpi=300)
+           width=20,height=10,dpi=300)
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
     write.csv(NQresults,"BeautifulShinerPondAbundanceDetection.csv",row.names=F)
@@ -363,7 +363,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             strip.text.x=element_text(size=12))
     print(plot)
     ggsave("BeautifulShinerWetlandPondAbundanceFigure.tiff",plot=plot,
-           width=15,height=10,dpi=300)
+           width=20,height=10,dpi=300)
   }
 
   print("Bayesian Population Model Complete",quote=FALSE)
@@ -568,7 +568,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.minor = element_blank())
     print(plot)
     ggsave("YaquiChubWetlandPondParameterFigure.tiff",plot=plot,
-           width=9,height=7,dpi=300)
+           width=12,height=7,dpi=300)
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
     write.csv(res2,"BeautifulShinerHabitatParameters.csv",row.names=F)
@@ -588,8 +588,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank())
     print(plot)
-    ggsave("BeautifulShinerWetlandPondParameterFigure.tiff",plot=plot,width=7,
-           height=9,dpi=300)
+    ggsave("BeautifulShinerWetlandPondParameterFigure.tiff",plot=plot,width=12,
+           height=7,dpi=300)
   }
   print("Results for the Habitat Model are saved and stored in your working directory.",quote=FALSE)
   print("Executing JAGS model to assess relationships with select Management variables. This may take several minutes to hours.",quote=FALSE)
@@ -764,7 +764,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.minor = element_blank())
     print(plot)
     ggsave("YaquiChubWetlandManagementParameterFigure.tiff",plot=plot,
-           width=9,height=7,dpi=300)
+           width=12,height=7,dpi=300)
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
     write.csv(res2,"BeautifulShinerManagementParameters.csv",row.names=F)
@@ -784,7 +784,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank())
     print(plot)
-    ggsave("BeautifulShinerWetlandManagementParameterFigure.tiff",plot=plot,width=9,
+    ggsave("BeautifulShinerWetlandManagementParameterFigure.tiff",plot=plot,width=12,
            height=7,dpi=300)
   }
   print("Results of the Management Model are saved and stored in your working directory.",quote=FALSE)
