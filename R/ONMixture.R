@@ -181,7 +181,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
       #Detection probabilities
       #q[i,j,k,t]~dbeta(2.5,6) #Slightly informative prior
-      logit(q[i,j,k,t])<-alpha[k] + alpha.veg*veg[i,k,t] + alpha.depth*depth[i,k,t] + alpha.temp*wtemp[i,k,t]
+      logit(q[i,j,k,t])<-alpha[k] + alpha.veg*veg[i,k,t] + alpha.depth*wdepth[i,k,t] + alpha.temp*wtemp[i,k,t]
       }}}}
 
       for(k in 1:npond){
@@ -234,7 +234,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
       #Detection probabilities
       #q[i,j,k,t]~dbeta(10,9) #Slightly informative prior
-      logit(q[i,j,k,t])<-alpha[k] + alpha.veg*veg[i,k,t] + alpha.depth*depth[i,k,t] + alpha.temp*wtemp[i,k,t]
+      logit(q[i,j,k,t])<-alpha[k] + alpha.veg*veg[i,k,t] + alpha.depth*wdepth[i,k,t] + alpha.temp*wtemp[i,k,t]
       }}}}
 
       for(k in 1:npond){
@@ -254,7 +254,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   jags.inits=function()list(N=Nst)
 
   #Bundle data
-  jags.data=list(y=y,nsite=nsite,nrep=nday,npond=npond,nyear=nyear)
+  jags.data=list(y=y,nsite=nsite,nrep=nday,npond=npond,nyear=nyear,veg=veg,wdepth=wdepth,wtemp=wtemp)
 
   #Parameters monitored
   jags.params=c("phi","det.mean","K","r",
