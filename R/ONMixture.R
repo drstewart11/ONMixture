@@ -146,16 +146,16 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       model{
 
       phi~dunif(0,100)
-      alpha_veg~dnorm(0,0.5)
-      alpha_depth~dnorm(0,0.5)
-      alpha_temp~dnorm(0,0.5)
+      #alpha_veg~dnorm(0,0.5)
+      #alpha_depth~dnorm(0,0.5)
+      #alpha_temp~dnorm(0,0.5)
 
       for(k in 1:npond){
       beta[k]~dnorm(0,0.01)
       r[k]~dunif(0,5)
       K[k]~dunif(50,5000)
       eta[k]~dgamma(phi,phi)
-      alpha[k]~dnorm(0,0.5)
+      #alpha[k]~dnorm(0,0.5)
       }
 
 
@@ -180,8 +180,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
 
       #Detection probabilities
-      #q[i,j,k,t]~dbeta(2.5,6) #Slightly informative prior
-      logit(q[i,j,k,t])<-alpha[k] + alpha_veg*veg[i,k,t] + alpha_depth*wdepth[i,k,t] + alpha_temp*wtemp[i,k,t]
+      q[i,j,k,t]~dbeta(2.5,6) #Slightly informative prior
+      #logit(q[i,j,k,t])<-alpha[k] + alpha_veg*veg[i,k,t] + alpha_depth*wdepth[i,k,t] + alpha_temp*wtemp[i,k,t]
       }}}}
 
       for(k in 1:npond){
@@ -199,8 +199,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
       phi~dunif(0,100)
       alpha_veg~dnorm(0,0.5)
-      alpha_depth~dnorm(0,0.5)
-      alpha_temp~dnorm(0,0.5)
+      #alpha_depth~dnorm(0,0.5)
+      #alpha_temp~dnorm(0,0.5)
 
       for(k in 1:npond){
       beta[k]~dnorm(0,0.01)
@@ -234,7 +234,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
       #Detection probabilities
       #q[i,j,k,t]~dbeta(10,9) #Slightly informative prior
-      logit(q[i,j,k,t])<-alpha[k] + alpha_veg*veg[i,k,t] + alpha_depth*wdepth[i,k,t] + alpha_temp*wtemp[i,k,t]
+      logit(q[i,j,k,t])<-alpha[k] + alpha_veg*veg[i,k,t] 
       }}}}
 
       for(k in 1:npond){
