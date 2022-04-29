@@ -703,7 +703,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   Nbshinerem.upper<-as.vector(Nbshinerem.upper)
   
   N.mean<-c(N.ytopstock,N.ytoprem,N.ychubstock,N.ychubrem,N.bshinestock,N.bshinerem)
-  N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower,)
+  N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower)
   N.upper<-c(Nytopstock.upper,Nytoprem.upper,Nychubstock.upper,Nychubrem.upper,Nbshinestock.upper,Nbshinerem.upper)
   Variable<-c("Yaqui Topminnow Stocked","Yaqui Topminnow Removed","Yaqui Chub Stocked",
              "Yaqui Chub Removed","Beautiful Shiner Stocked","Beautiful Shiner Removed")
