@@ -28,7 +28,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   }else if(species=="BSHINER"){
     newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,site=count$site,y=count$BS_small)
     newdat<-newdat %>% group_by(pname,year,site) %>% summarise(y=mean(y))
-    countdata<-newdat[order(newdat$year,newdat$pname,newdat$day,newdat$site),]
+    countdata<-newdat[order(newdat$year,newdat$pname,newdat$site),]
   }
 
   #Define 4-dimensional array dimensions
