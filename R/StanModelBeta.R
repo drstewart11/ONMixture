@@ -12,10 +12,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Add pname field to count, mgmt, and hab .csv files
   #pname is a numeric wetland pond field
   #yr is a numeric year field
-  count=countdat
-  hab=habdat
-  mgmt=mgmtdat
-
+  
   count$pname<-as.numeric(as.factor(count$pond_name))
   count$yr<-as.numeric(as.factor(count$year))
   mgmt$pname<-as.numeric(as.factor(mgmt$pond_name))
