@@ -97,7 +97,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     verbose = FALSE
   )
   fit_summary <- summary(fit,pars=c("mu_coef"),probs=c(0.1,0.9))
-  fit_summary <- fit_summary[["summary"]]
+  #fit_summary <- fit_summary[["summary"]]
   
   print(plot(fit,pars=c("mu_coef")))
   #plot(fit, show_density = TRUE, ci_level = 0.5, fill_color = "purple")
