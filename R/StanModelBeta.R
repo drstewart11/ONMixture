@@ -97,8 +97,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     verbose = FALSE
   )
 
-  mu_tau_summary <- summary(fit, pars = c("mu_coef"),
-                            probs = c(0.1, 0.9))$summary
+  mu_tau_summary <- summary(fit, pars = c("mu_coef"),probs = c(0.1, 0.9))$summary
   print(mu_tau_summary)
   plot(fit,pars=c("mu_coef"))
 
