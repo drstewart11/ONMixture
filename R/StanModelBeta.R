@@ -96,21 +96,20 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     thin = 1,iter=50,
     verbose = FALSE
   )
+  fit_summary <- summary(fit,pars=c("mu_coef"),probs=c(0.1,0.9))
 
-  mu_tau_summary <- summary(fit, pars = c("mu_coef"), 
-                            probs = c(0.1, 0.9))$summary
-    
+  print(plot(fit,pars=c("mu_coef")))
   #plot(fit, show_density = TRUE, ci_level = 0.5, fill_color = "purple")
   #plot(fit, plotfun = "trace", pars = c("coef_m","coef_p"), inc_warmup = TRUE)
   #plot(fit, plotfun = "rhat") + ggtitle("Example of adding title to plot")
   
   if(species=="YCHUB"){
     #Capture and Write results to working directory (R Data Files)
-    write.csv(mu_tau_summary,"YaquiChubPercentSmallHabitat.csv",row.names=F)
+    write.csv(fit_summary,"YaquiChubPercentSmallHabitat.csv",row.names=F)
     
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
-    write.csv(mu_tau_summary,"BShinerPercentSmallHabitat.csv",row.names=F)
+    write.csv(fit_summary,"BShinerPercentSmallHabitat.csv",row.names=F)
     
   }
   print("Results are saved and stored in your working directory.",quote=FALSE)
