@@ -97,29 +97,26 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     verbose = FALSE
   )
 
-  mu_tau_summary <- summary(fit, pars = c("mu_coef"),probs = c(0.1, 0.9))$summary
-  print(mu_tau_summary)
+  mu_tau_summary <- summary(fit, pars = c("mu_coef"), 
+                            probs = c(0.1, 0.9))$summary
   plot(fit,pars=c("mu_coef"))
-
-
+  
+  
   #plot(fit, show_density = TRUE, ci_level = 0.5, fill_color = "purple")
   #plot(fit, plotfun = "trace", pars = c("coef_m","coef_p"), inc_warmup = TRUE)
   #plot(fit, plotfun = "rhat") + ggtitle("Example of adding title to plot")
-
+  
   if(species=="YCHUB"){
-
     #Capture and Write results to working directory (R Data Files)
     write.csv(mu_tau_summary,"YaquiChubPercentSmallHabitat.csv",row.names=F)
-
+    
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
     write.csv(mu_tau_summary,"BShinerPercentSmallHabitat.csv",row.names=F)
-
+    
   }
   print("mu_coef[1] is the intercept, mu_coef[2]*veg, mu_coef[3]*depth, mu_coef[4]*temp, mu_coef[5]*dissolvedoxygen, mu_coef[6]*ph",quote=FALSE)
   print("Results are saved and stored in your working directory.",quote=FALSE)
   print("Consult with the Regional Statistician (Dr. David R. Stewart) and the Regional Data Management Team once complete (if needed) or if you have any concerns.")
+  }
 
-
-
-}
