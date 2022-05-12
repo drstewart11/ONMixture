@@ -96,10 +96,11 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     thin = 1,iter=50,
     verbose = FALSE
   )
-  fit_summary <- summary(fit,pars=c("mu_coef"),probs=c(0.1,0.9))
+  print("Ignore this error. The results are saved to your working directory. I am still finding a work around.",quote=FALSE)
+  fit_summary <- summary(fit,pars=c("mu_coef"),probs=c(0.1,0.9))$summary
   #fit_summary <- fit_summary[["summary"]]
   
-  plot(fit,pars=c("mu_coef"))
+  
   #plot(fit, show_density = TRUE, ci_level = 0.5, fill_color = "purple")
   #plot(fit, plotfun = "trace", pars = c("coef_m","coef_p"), inc_warmup = TRUE)
   #plot(fit, plotfun = "rhat") + ggtitle("Example of adding title to plot")
