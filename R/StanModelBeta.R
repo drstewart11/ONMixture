@@ -106,12 +106,14 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   
   if(species=="YCHUB"){
     #Capture and Write results to working directory (R Data Files)
-    saveRDS(fit,"YCHUB_rds_file")
-           
+    #saveRDS(fit,"YCHUB_rds_file")
+     print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
+     print(plot(fit,pars=c("mu_coef")))
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
-    saveRDS(fit,"BSHINER_rds_file")
-    
+    #saveRDS(fit,"BSHINER_rds_file")
+    print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
+    print(plot(fit,pars=c("mu_coef")))
   }
   print("Results are saved and stored in your working directory.",quote=FALSE)
   print("Consult with the Regional Statistician (Dr. David R. Stewart) and the Regional Data Management Team once complete (if needed) or if you have any concerns.")
