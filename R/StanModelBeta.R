@@ -109,7 +109,8 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     #saveRDS(fit,"YCHUB_rds_file")
     print("//////////////////////////////////////////////",quote=FALSE)
     print("//////////////////////////////////////////////",quote=FALSE)
-    
+    print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
+
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
      plot(fit,pars=c("mu_coef"))
   }else if(species=="BSHINER"){
@@ -117,14 +118,14 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     #saveRDS(fit,"BSHINER_rds_file")
     print("//////////////////////////////////////////////",quote=FALSE)
     print("//////////////////////////////////////////////",quote=FALSE)
-    
+      print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
+
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
      plot(fit)
    
   }
-  print("////////////////////////////////////////////////",quote=FALSE)
-  print("Read below",quote=FALSE)
-  print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
-  print("Consult with the Regional Statistician (Dr. David R. Stewart) and the Regional Data Management Team once complete (if needed) or if you have any concerns.")
+
+    
+    print("Consult with the Regional Statistician (Dr. David R. Stewart) and the Regional Data Management Team once complete (if needed) or if you have any concerns.")
   }
 
