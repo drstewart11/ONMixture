@@ -93,7 +93,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   fit = sampling(
     model,
     data = stan_data,
-    thin = 1,iter=5000,
+    thin = 1,iter=50,
     verbose = FALSE
   )
   
@@ -124,7 +124,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
      #write.csv(print(fit_summary$fit),"PSmall_YCHUB_HabitatParameters.csv",row.names=F)
 
      print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))   
-     ggsave("PSmall_YCHUB.png")
+     ggsave("PSmall_YCHUB.png",width = 5, height = 4, dpi = 300, units = "in")
 
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
@@ -143,7 +143,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
           mu_coef[5] = Dissolved Oxygen,
           mu_coef[6] = pH",quote=FALSE)
      print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))
-     ggsave("PSmall_BSHINER.png")
+     ggsave("PSmall_BSHINER.png",width = 5, height = 4, dpi = 300, units = "in")
   }
 
     
