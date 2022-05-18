@@ -121,8 +121,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
 
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-     plot(fit,pars=c("mu_coef"))
-   
+     stan_plot(fit, pars=c("mu_coef"), include = TRUE)   
   }
 
     
