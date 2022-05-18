@@ -93,7 +93,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   fit = sampling(
     model,
     data = stan_data,
-    thin = 1,iter=5000,
+    thin = 1,iter=1000,
     verbose = FALSE
   )
   
@@ -106,13 +106,11 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   
   if(species=="YCHUB"){
     #Capture and Write results to working directory (R Data Files)
-    YCHUB_rds_file <- tempfile(fileext = ".RDS")
-    fit$save_object(file = YCHUB_rds_file)
-       
+    saveRDS(fit,"YCHUB_rds_file")
+           
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
-    BSHINER_rds_file <- tempfile(fileext = ".RDS")
-    fit$save_object(file = BSHINER_rds_file)
+    saveRDS(fit,"BSHINER_rds_file")
     
   }
   print("Results are saved and stored in your working directory.",quote=FALSE)
