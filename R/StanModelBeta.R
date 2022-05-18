@@ -96,9 +96,8 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     thin = 1,iter=5000,
     verbose = FALSE
   )
-  print("Ignore this error. The results are saved to your working directory. I am still finding a work around.",quote=FALSE)
-  fit_summary <- summary(fit,pars=c("mu_coef"),probs=c(0.1,0.9))$summary
-  #fit_summary <- fit_summary[["summary"]]
+  
+  
   
   
   #plot(fit, show_density = TRUE, ci_level = 0.5, fill_color = "purple")
@@ -107,11 +106,13 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   
   if(species=="YCHUB"){
     #Capture and Write results to working directory (R Data Files)
-    write.csv(fit_summary,"YaquiChubPercentSmallHabitat.csv",row.names=F)
-    
+    YCHUB_rds_file <- tempfile(fileext = ".RDS")
+    fit$save_object(file = YCHUB_rds_file)
+       
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
-    write.csv(fit_summary,"BShinerPercentSmallHabitat.csv",row.names=F)
+    BSHINER_rds_file <- tempfile(fileext = ".RDS")
+    fit$save_object(file = BSHINER_rds_file)
     
   }
   print("Results are saved and stored in your working directory.",quote=FALSE)
