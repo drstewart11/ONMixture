@@ -113,6 +113,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
      print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))   
+     ggsave("PSmall_YCHUB.png")
 
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
@@ -122,7 +123,8 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
 
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))   
+     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))
+     ggsave("PSmall_BSHINER.png")
   }
 
     
