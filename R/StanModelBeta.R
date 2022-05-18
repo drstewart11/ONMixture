@@ -112,10 +112,11 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
 
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-     p=print(fit,pars=c("mu_coef"),probs=c(.1,.5.9))
-     write.csv(p,"PSmall_YCHUB_HabitatParameters.csv",row.names=F)
+     x <- as.matrix(fit, pars = c("mu_coef")) 
+     write.csv(x,"PSmall_YCHUB_HabitatParameters.csv",row.names=F)
 
-     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))   
+     mcmc_intervals(x) + scale_y_discrete(labels = c("Intercept","Veg","Depth","Temp","DO","pH")) # my_labels is character vector 
+     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE)+scale_y_discrete(labels = c("Intercept","Veg","Depth","Temp","DO","pH")))   
      ggsave("PSmall_YCHUB.png")
 
   }else if(species=="BSHINER"){
@@ -126,10 +127,11 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
 
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-     p=print(fit,pars=c("mu_coef"),probs=c(.1,.5.9))
-     write.csv(p,"PSmall_BSHINER_HabitatParameters.csv",row.names=F)
-
-     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))
+     x <- as.matrix(fit, pars = c("mu_coef")) 
+     write.csv(x,"PSmall_BSHINER_HabitatParameters.csv",row.names=F)
+      
+     mcmc_intervals(x) + scale_y_discrete(labels = c("Intercept","Veg","Depth","Temp","DO","pH")) # my_labels is character vector 
+     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE)+scale_y_discrete(labels = c("Intercept","Veg","Depth","Temp","DO","pH")))
      ggsave("PSmall_BSHINER.png")
   }
 
