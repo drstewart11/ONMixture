@@ -77,7 +77,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
 
 
-  print("Initiate Bayesian formulation of the Beta regression. This could take several minutes to hours.",quote=FALSE)
+  print("Initiate Bayesian formulation of the Beta regression using Stan.",quote=FALSE)
 
   library(rstan)
   model = stan_model("zoibeta.stan")
@@ -121,7 +121,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
 
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-     plot(fit)
+     plot(fit,pars=c("mu_coef"))
    
   }
 
