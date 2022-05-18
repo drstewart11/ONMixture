@@ -119,7 +119,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     print("//////////////////////////////////////////////",quote=FALSE)
     
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-     plot(fit,pars=c("mu_coef"))
+     plot(fit)
    
   }
   print("////////////////////////////////////////////////",quote=FALSE)
