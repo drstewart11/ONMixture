@@ -112,8 +112,8 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
 
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-     fit_summary=summary(fit) 
-     write.csv(print(fit_summary$fit),"PSmall_YCHUB_HabitatParameters.csv",row.names=F)
+     #fit_summary=summary(fit) 
+     #write.csv(print(fit_summary$fit),"PSmall_YCHUB_HabitatParameters.csv",row.names=F)
 
      print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))   
      ggsave("PSmall_YCHUB.png")
@@ -126,8 +126,8 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
 
      print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-     fit_summary=summary(fit,pars=c("mu_coef")) 
-     write.csv(print(fit_summary$summary),"PSmall_BSHINER_HabitatParameters.csv",row.names=F)
+     #fit_summary=summary(fit,pars=c("mu_coef")) 
+     #write.csv(print(fit_summary$summary),"PSmall_BSHINER_HabitatParameters.csv",row.names=F)
       
      print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))
      ggsave("PSmall_BSHINER.png")
