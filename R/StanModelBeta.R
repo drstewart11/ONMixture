@@ -93,7 +93,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   fit = sampling(
     model,
     data = stan_data,
-    thin = 1,iter=50,
+    thin = 1,iter=5000,
     verbose = FALSE
   )
   
