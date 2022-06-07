@@ -74,11 +74,11 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   newhab<-habdata %>% group_by(pname,year,site) %>% summarise(veg=mean(veg),depth=mean(wdepth),temp=mean(wtemp),oxy=mean(doxygen),ph=mean(pH))
 
-  veg = scale(newhab$veg, center=TRUE)
-  depth = scale(newhab$depth, center = TRUE)
-  temp = scale(newhab$temp, center = TRUE)
-  oxy = scale(newhab$oxy, center = TRUE)
-  ph = scale(newhab$ph, center = TRUE)
+  veg = newhab$veg-mean(newhab$veg)
+  depth = newhab$depth-mean(newhab$depth)
+  temp = newhab$temp-mean(newhab$temp)
+  oxy = newhab$oxy-mean(newhab$oxy)
+  ph = newhab$ph-mean(newhab$ph)
 
 
 
