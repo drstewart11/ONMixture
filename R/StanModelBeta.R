@@ -12,7 +12,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Add pname field to count, mgmt, and hab .csv files
   #pname is a numeric wetland pond field
   #yr is a numeric year field
-  
+
   count$pname<-as.numeric(as.factor(count$pond_name))
   count$yr<-as.numeric(as.factor(count$year))
   mgmt$pname<-as.numeric(as.factor(mgmt$pond_name))
@@ -74,11 +74,11 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   newhab<-habdata %>% group_by(pname,year,site) %>% summarise(veg=mean(veg),depth=mean(wdepth),temp=mean(wtemp),oxy=mean(doxygen),ph=mean(pH))
 
-  veg = scale(newhab$veg, center=TRUE)
-  depth = scale(newhab$depth, center = TRUE)
-  temp = scale(newhab$temp, center = TRUE)
-  oxy = scale(newhab$oxy, center = TRUE)
-  ph = scale(newhab$ph, center = TRUE)
+  veg = newhab$veg-mean(newhab$veg)
+  depth = newhab$depth-mean(newhab$depth)
+  temp = newhab$temp-mean(newhab$temp)
+  oxy = newhab$oxy-mean(newhab$oxy)
+  ph = newhab$ph-mean(newhab$ph)
 
 
 
@@ -101,14 +101,14 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     thin = 1,iter=5000,
     verbose = FALSE
   )
-  
-  
-  
-  
+
+
+
+
   #plot(fit, show_density = TRUE, ci_level = 0.5, fill_color = "purple")
   #plot(fit, plotfun = "trace", pars = c("coef_m","coef_p"), inc_warmup = TRUE)
   #plot(fit, plotfun = "rhat") + ggtitle("Example of adding title to plot")
-  
+
   if(species=="YCHUB"){
     #Capture and Write results to working directory (R Data Files)
     #saveRDS(fit,"YCHUB_rds_file")
@@ -116,42 +116,41 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     print("//////////////////////////////////////////////",quote=FALSE)
     print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
 
-     print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-    
+    print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
+
     print("mu_coef[1] = Intercept,
           mu_coef[2] = Vegetation,
           mu_coef[3] = Depth,
           mu_coef[4] = Temp,
           mu_coef[5] = Dissolved Oxygen,
           mu_coef[6] = pH",quote=FALSE)
-    
-     #fit_summary=summary(fit) 
-     #write.csv(print(fit_summary$fit),"PSmall_YCHUB_HabitatParameters.csv",row.names=F)
 
-     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))   
-     ggsave("PSmall_YCHUB.png",width = 5, height = 4, dpi = 300, units = "in")
+    #fit_summary=summary(fit)
+    #write.csv(print(fit_summary$fit),"PSmall_YCHUB_HabitatParameters.csv",row.names=F)
+
+    print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))
+    ggsave("PSmall_YCHUB.png",width = 5, height = 4, dpi = 300, units = "in")
 
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
     #saveRDS(fit,"BSHINER_rds_file")
     print("//////////////////////////////////////////////",quote=FALSE)
     print("//////////////////////////////////////////////",quote=FALSE)
-      print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
+    print("Save these results to your working directory directly or by cut-and-paste into a txt file.",quote=FALSE)
 
-     print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
-     #fit_summary=summary(fit,pars=c("mu_coef")) 
-     #write.csv(print(fit_summary$summary),"PSmall_BSHINER_HabitatParameters.csv",row.names=F)
-      print("mu_coef[1] = Intercept,
+    print(fit, pars=c("mu_coef"), probs=c(.1,.5,.9))
+    #fit_summary=summary(fit,pars=c("mu_coef"))
+    #write.csv(print(fit_summary$summary),"PSmall_BSHINER_HabitatParameters.csv",row.names=F)
+    print("mu_coef[1] = Intercept,
           mu_coef[2] = Vegetation,
           mu_coef[3] = Depth,
           mu_coef[4] = Temp,
           mu_coef[5] = Dissolved Oxygen,
           mu_coef[6] = pH",quote=FALSE)
-     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))
-     ggsave("PSmall_BSHINER.png",width = 5, height = 4, dpi = 300, units = "in")
+    print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))
+    ggsave("PSmall_BSHINER.png",width = 5, height = 4, dpi = 300, units = "in")
   }
 
-    
-    print("Consult with the Regional Statistician (Dr. David R. Stewart) and the Regional Data Management Team once complete (if needed) or if you have any concerns.")
-  }
 
+  print("Consult with the Regional Statistician (Dr. David R. Stewart) and the Regional Data Management Team once complete (if needed) or if you have any concerns.")
+}

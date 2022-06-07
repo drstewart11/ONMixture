@@ -55,7 +55,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   #Reorder management activity data
   mgmtdata<-newmgmt[order(newmgmt$year,newmgmt$pname),]
-  
+
   #Expand data.frame
   mgmtdat<-mgmtdata %>% group_by(pname,year,ychubrem,bshinerrem,ytoprem,
                                  ychubstock,bshinerstock,ytopstock) %>% expand(sites = 1:10)
@@ -141,15 +141,13 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   print("Initiate Bayesian Population Model. This may take several minutes to hours.",quote=FALSE)
 
   if(species=="YCHUB"){
-  modelFilename="Bayesian.Population.Model.txt"
-  cat("
+    modelFilename="Bayesian.Population.Model.txt"
+    cat("
       model{
-
       phi~dunif(0,100)
       #alpha_veg~dnorm(0,0.5)
       #alpha_depth~dnorm(0,0.5)
       #alpha_temp~dnorm(0,0.5)
-
       for(k in 1:npond){
       beta[k]~dnorm(0,0.01)
       r[k]~dunif(0,5)
@@ -157,14 +155,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       eta[k]~dgamma(phi,phi)
       #alpha[k]~dnorm(0,0.5)
       }
-
-
       for(i in 1:nsite){
       for(k in 1:npond){
       N[i,k,1]~dpois(lambda[i,k])
       lambda[i,k]<-muL[i,k]*eta[k]
       log(muL[i,k])<-beta[k]
-
       for(t in 2:nyear){
       mu[i,k,t-1]<-N[i,k,t-1]*exp(r[k]*(1-(N[i,k,t-1]/K[k])))
       #mu[i,k,t-1]<-r[k]*N[i,k,t-1]*((K[k]-N[i,k,t-1])/K[k])
@@ -172,31 +167,26 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       }
       }
       }
-
       for(i in 1:nsite){
       for(j in 1:nrep){
       for(k in 1:npond){
       for(t in 1:nyear){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
-
       #Detection probabilities
       q[i,j,k,t]~dbeta(2.5,6) #Slightly informative prior
       #logit(q[i,j,k,t])<-alpha[k] + alpha_veg*veg[i,k,t] + alpha_depth*wdepth[i,k,t] + alpha_temp*wtemp[i,k,t]
       }}}}
-
       for(k in 1:npond){
       for(t in 1:nyear){
       N.total[k,t]<-sum(N[,k,t])
       det.mean[k,t]<-mean(q[,,k,t])
       }
       }
-
       }",fill=TRUE,file=modelFilename)
-}else if(species=="BSHINER"){
-     modelFilename="Bayesian.Population.Model.txt"
-  cat("
+  }else if(species=="BSHINER"){
+    modelFilename="Bayesian.Population.Model.txt"
+    cat("
       model{
-
       phi~dunif(0,100)
       alpha_veg~dnorm(0,0.5)
       #alpha_depth~dnorm(0,0.5)
@@ -207,16 +197,13 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       r[k]~dunif(0,5)
       K[k]~dunif(50,5000)
       eta[k]~dgamma(phi,phi)
-      
+
       }
-
-
       for(i in 1:nsite){
       for(k in 1:npond){
       N[i,k,1]~dpois(lambda[i,k])
       lambda[i,k]<-muL[i,k]*eta[k]
       log(muL[i,k])<-beta[k]
-
       for(t in 2:nyear){
       mu[i,k,t-1]<-N[i,k,t-1]*exp(r[k]*(1-(N[i,k,t-1]/K[k])))
       #mu[i,k,t-1]<-r[k]*N[i,k,t-1]*((K[k]-N[i,k,t-1])/K[k])
@@ -224,31 +211,27 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       }
       }
       }
-
       for(i in 1:nsite){
       for(j in 1:nrep){
       for(k in 1:npond){
       #alpha[i,j,k]~dnorm(0,0.5)
       for(t in 1:nyear){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
-
       #Detection probabilities
       #q[i,j,k,t]~dbeta(10,9) #Slightly informative prior
-      logit(q[i,j,k,t])<-alpha + alpha_veg*veg[i,k,t] 
+      logit(q[i,j,k,t])<-alpha + alpha_veg*veg[i,k,t]
       }}}}
-
       for(k in 1:npond){
       for(t in 1:nyear){
       N.total[k,t]<-sum(N[,k,t])
       det.mean[k,t]<-mean(q[,,k,t])
       }
       }
-
       }",fill=TRUE,file=modelFilename)
-    }
-    
-    
-    
+  }
+
+
+
   #Initial values
   Nst<-apply(y,c(1,3,4),sum,na.rm=T)+1
   jags.inits=function()list(N=Nst)
@@ -375,28 +358,23 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   cat("
       model{
       phi~dunif(0,100)
-
       #Abundance parameters
       beta.depth~dnorm(0,0.01)
       beta.oxygen~dnorm(0,0.01)
       beta.cond~dnorm(0,0.01)
       beta.ntu~dnorm(0,0.01)
       #beta.algal~dnorm(0,0.01)
-
       #Detection parameters
       alpha~dnorm(0,0.01)
       alpha.depth~dnorm(0,0.01)
       alpha.temp~dnorm(0,0.01)
       alpha.veg~dnorm(0,0.01)
-
       for(k in 1:npond){
       beta[k]~dnorm(mu_pond,tau_pond) #Random pond effect
       }
-
       mu_pond~dnorm(0,0.01)
       tau_pond~dgamma(0.01,0.01)
       sd_pond<-1/sqrt(tau_pond)
-
       for(i in 1:nsite){
       eta[i]~dgamma(phi,phi)
       for(k in 1:npond){
@@ -405,20 +383,17 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       lambda[i,k,t]<-muL[i,k,t]*eta[i]
       log(muL[i,k,t])<-beta[k] + beta.depth*wdepth[i,k,t] +
       beta.oxygen*doxygen[i,k,t] + beta.cond*wcond[i,k,t] +
-      beta.ntu*ntu[i,k,t] 
+      beta.ntu*ntu[i,k,t]
       }}}
-
       for(i in 1:nsite){
       for(j in 1:nrep){
       for(k in 1:npond){
       for(t in 1:nyear){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
-
       #Detection probabilities
       logit(q[i,j,k,t])<-alpha + alpha.depth*wdepth[i,k,t] +
       alpha.temp*wtemp[i,k,t] + alpha.veg*veg[i,k,t]
       }}}}
-
       }",fill=TRUE,file=modelFilename)
 
   #Initial values
@@ -594,13 +569,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   print("Results for the Habitat Model are saved and stored in your working directory.",quote=FALSE)
   print("Executing JAGS model to assess relationships with select Management variables. This may take several minutes to hours.",quote=FALSE)
 
-#Define model file name and create JAGS model to assess relationships with
+  #Define model file name and create JAGS model to assess relationships with
   #known habitat variables
   modelFilename="Management.Model.txt"
   cat("
       model{
       phi~dunif(0,100)
-
       #Abundance parameters
       beta~dnorm(0,0.01)
       beta.ytoprem~dnorm(0,0.01)
@@ -609,7 +583,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       beta.ychubstock~dnorm(0,0.01)
       beta.bshinerem~dnorm(0,0.01)
       beta.bshinestock~dnorm(0,0.01)
-
       #Detection parameters
       for(k in 1:npond){
       alpha[k]~dnorm(mu.alpha,tau.alpha)
@@ -617,7 +590,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       mu.alpha~dnorm(0,0.01)
       tau.alpha~dgamma(0.1,0.1)
       sd_pond<-1/tau.alpha
-
       for(i in 1:nsite){
       eta[i]~dgamma(phi,phi)
       for(k in 1:npond){
@@ -626,19 +598,16 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       lambda[i,k,t]<-muL[i,k,t]*eta[i]
       log(muL[i,k,t])<-beta + beta.ytoprem*ytoprem[i,k,t] +
       beta.ytopstock*ytopstock[i,k,t] + beta.ychubrem*ychubrem[i,k,t] + beta.ychubstock*ychubstock[i,k,t] +
-      beta.bshinerem*bshinerem[i,k,t] + beta.bshinestock*bshinestock[i,k,t] 
+      beta.bshinerem*bshinerem[i,k,t] + beta.bshinestock*bshinestock[i,k,t]
       }}}
-
       for(i in 1:nsite){
       for(j in 1:nrep){
       for(k in 1:npond){
       for(t in 1:nyear){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
-
       #Detection probabilities
-      logit(q[i,j,k,t])<-alpha[k]   
+      logit(q[i,j,k,t])<-alpha[k]
       }}}}
-
       }",fill=TRUE,file=modelFilename)
 
   #Initial values
@@ -648,7 +617,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Bundle data
   ndata=list(y=y,nsite=nsite,nrep=nday,npond=npond,nyear=nyear,
              ytoprem=ytoprem,ytopstock=ytopstock,ychubrem=ychubrem,ychubstock=ychubstock,
-            bshinerem=bshinerem,bshinestock=bshinestock)
+             bshinerem=bshinerem,bshinestock=bshinestock)
 
   #Parameters monitored
   params=c("phi","beta","beta.ytoprem","beta.ytopstock","beta.ychubrem","beta.ychubstock",
@@ -671,47 +640,47 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   Nytopstock.lower<-as.vector(Nytopstock.lower)
   Nytopstock.upper<-round(unlist(out2$q97.5$beta.ytopstock),2)
   Nytopstock.upper<-as.vector(Nytopstock.upper)
-  
+
   N.ychubstock<-round(unlist(out2$mean$beta.ychubstock),2)
   N.ychubstock<-as.vector(N.ychubstock)
   Nychubstock.lower<-round(unlist(out2$q2.5$beta.ychubstock),2)
   Nychubstock.lower<-as.vector(Nychubstock.lower)
   Nychubstock.upper<-round(unlist(out2$q97.5$beta.ychubstock),2)
   Nychubstock.upper<-as.vector(Nychubstock.upper)
-  
+
   N.bshinestock<-round(unlist(out2$mean$beta.bshinestock),2)
   N.bshinestock<-as.vector(N.bshinestock)
   Nbshinestock.lower<-round(unlist(out2$q2.5$beta.bshinestock),2)
   Nbshinestock.lower<-as.vector(Nbshinestock.lower)
   Nbshinestock.upper<-round(unlist(out2$q97.5$beta.bshinestock),2)
   Nbshinestock.upper<-as.vector(Nbshinestock.upper)
-  
+
   N.ytoprem<-round(unlist(out2$mean$beta.ytoprem),2)
   N.ytoprem<-as.vector(N.ytoprem)
   Nytoprem.lower<-round(unlist(out2$q2.5$beta.ytoprem),2)
   Nytoprem.lower<-as.vector(Nytoprem.lower)
   Nytoprem.upper<-round(unlist(out2$q97.5$beta.ytoprem),2)
   Nytoprem.upper<-as.vector(Nytoprem.upper)
-  
+
   N.ychubrem<-round(unlist(out2$mean$beta.ychubrem),2)
   N.ychubrem<-as.vector(N.ychubrem)
   Nychubrem.lower<-round(unlist(out2$q2.5$beta.ychubrem),2)
   Nychubrem.lower<-as.vector(Nychubrem.lower)
   Nychubrem.upper<-round(unlist(out2$q97.5$beta.ychubrem),2)
   Nychubrem.upper<-as.vector(Nychubrem.upper)
-  
+
   N.bshinerem<-round(unlist(out2$mean$beta.bshinerem),2)
   N.bshinerem<-as.vector(N.bshinerem)
   Nbshinerem.lower<-round(unlist(out2$q2.5$beta.bshinerem),2)
   Nbshinerem.lower<-as.vector(Nbshinerem.lower)
   Nbshinerem.upper<-round(unlist(out2$q97.5$beta.bshinerem),2)
   Nbshinerem.upper<-as.vector(Nbshinerem.upper)
-  
+
   N.mean<-c(N.ytopstock,N.ytoprem,N.ychubstock,N.ychubrem,N.bshinestock,N.bshinerem)
   N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower)
   N.upper<-c(Nytopstock.upper,Nytoprem.upper,Nychubstock.upper,Nychubrem.upper,Nbshinestock.upper,Nbshinerem.upper)
   Variable<-c("Yaqui Topminnow Stocked","Yaqui Topminnow Removed","Yaqui Chub Stocked",
-             "Yaqui Chub Removed","Beautiful Shiner Stocked","Beautiful Shiner Removed")
+              "Yaqui Chub Removed","Beautiful Shiner Stocked","Beautiful Shiner Removed")
   Parameter<-rep(c("Abundance"),6)
 
   res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,

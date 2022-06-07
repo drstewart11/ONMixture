@@ -1,7 +1,7 @@
 Package: ONMixture
 Type: Package
 Title: ONMixture: Open-population hierarchical Bayesian modeling function
-Version: 0.1.0
+Version: 0.2.0
 Author: Dr. David R. Stewart
 Maintainer: <david_stewart@fws.gov>
 Description: ONMixture accompanies the San Bernardino National Wildlife Refuge
