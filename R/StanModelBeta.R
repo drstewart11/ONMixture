@@ -74,6 +74,11 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   newhab<-habdata %>% group_by(pname,year,site) %>% summarise(veg=mean(veg),depth=mean(wdepth),temp=mean(wtemp),oxy=mean(doxygen),ph=mean(pH))
 
+  veg = scale(newhab$veg, center=TRUE)
+  depth = scale(newhab$depth, center = TRUE)
+  temp = scale(newhab$temp, center = TRUE)
+  oxy = scale(newhab$oxy, center = TRUE)
+  ph = scale(newhab$ph, center = TRUE)
 
 
 
@@ -84,11 +89,11 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   stan_data = list(n = length(countdata$y),
                    y = countdata$y,
-                   veg = newhab$veg,
-                   depth = newhab$depth,
-                   temp = newhab$temp,
-                   oxy = newhab$oxy,
-                   ph = newhab$ph)
+                   veg = veg,
+                   depth = depth,
+                   temp = temp,
+                   oxy = oxy,
+                   ph = ph)
 
   fit = sampling(
     model,
