@@ -8,7 +8,7 @@ Description: ONMixture accompanies the San Bernardino Wildlife Refuge Rio Yaqui 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Depends: 
+Imports: 
       jagsUI,
       rjags,
       ggplot2,
@@ -19,4 +19,4 @@ Depends:
       rstan
 URL: https://github.com/drstewart11/ONMixture
 Issues: https://github.com/drstewart11/ONMixture/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0

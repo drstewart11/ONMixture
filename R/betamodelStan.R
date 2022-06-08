@@ -74,13 +74,6 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   newhab<-habdata %>% group_by(pname,year,site) %>% summarise(veg=mean(veg),depth=mean(wdepth),temp=mean(wtemp),oxy=mean(doxygen),ph=mean(pH))
 
-  veg = newhab$veg-mean(newhab$veg)
-  depth = newhab$depth-mean(newhab$depth)
-  temp = newhab$temp-mean(newhab$temp)
-  oxy = newhab$oxy-mean(newhab$oxy)
-  ph = newhab$ph-mean(newhab$ph)
-
-
 
   print("Initiate Bayesian formulation of the Beta regression using Stan.",quote=FALSE)
 
@@ -88,11 +81,11 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   stan_data = list(n = length(countdata$y),
                    y = countdata$y,
-                   veg = veg,
-                   depth = depth,
-                   temp = temp,
-                   oxy = oxy,
-                   ph = ph)
+                   veg = newhab$veg,
+                   depth = newhab$depth,
+                   temp = newhab$temp,
+                   oxy = newhab$oxy,
+                   ph = newhab$ph)
 
   fit = sampling(
     model,
