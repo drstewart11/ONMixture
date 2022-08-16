@@ -150,7 +150,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       #alpha_temp~dnorm(0,0.5)
       for(k in 1:npond){
       beta[k]~dnorm(0,0.01)
-      r[k]~dunif(-5,5)
+      r[k]~dunif(0,5)
       K[k]~dunif(50,5000)
       eta[k]~dgamma(phi,phi)
       #alpha[k]~dnorm(0,0.5)
@@ -194,7 +194,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       alpha~dnorm(0,0.5)
       for(k in 1:npond){
       beta[k]~dnorm(0,0.01)
-      r[k]~dunif(-5,5)
+      r[k]~dunif(0,5)
       K[k]~dunif(50,5000)
       eta[k]~dgamma(phi,phi)
       }
