@@ -313,7 +313,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     write.csv(NQresults,"YaquiChubPondAbundanceDetection.csv",row.names=F)
     write.csv(GRresults,"YaquiChubPondPopGrowthRate.csv",row.names=F)
 
-    plot<-ggplot(NQresults,aes(Year,Pop_estimate,colour=factor(WetlandPond)))+
+    plot<-ggplot(NQresults,aes(as.factor(Year),Pop_estimate,colour=factor(WetlandPond)))+
       geom_point(size=4)+
       geom_errorbar(aes(ymin=NLower95,ymax=NUpper95),width=.2,size=1.5)+
       facet_wrap(~WetlandPond,ncol=7)+
@@ -332,7 +332,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     write.csv(NQresults,"BeautifulShinerPondAbundanceDetection.csv",row.names=F)
     write.csv(GRresults,"BeautifulShinerPondPopGrowthRate.csv",row.names=F)
 
-    plot<-ggplot(NQresults,aes(Year,Pop_estimate,colour=factor(WetlandPond)))+
+    plot<-ggplot(NQresults,aes(as.factor(Year),Pop_estimate,colour=factor(WetlandPond)))+
       geom_point(size=4)+
       geom_errorbar(aes(ymin=NLower95,ymax=NUpper95),width=.2,size=1.5)+
       facet_wrap(~WetlandPond,ncol=7)+
