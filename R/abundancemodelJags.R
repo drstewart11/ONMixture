@@ -161,8 +161,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       lambda[i,k]<-muL[i,k]*eta[k]
       log(muL[i,k])<-beta[k]
       for(t in 2:nyear){
-      mu[i,k,t-1]<-N[i,k,t-1]*exp(r[k]*(1-(N[i,k,t-1]/K[k])))
-      #mu[i,k,t-1]<-r[k]*N[i,k,t-1]*((K[k]-N[i,k,t-1])/K[k])
+      #mu[i,k,t-1]<-N[i,k,t-1]*exp(r[k]*(1-(N[i,k,t-1]/K[k])))
+      mu[i,k,t-1]<-r[k]*N[i,k,t-1]*((K[k]-N[i,k,t-1])/K[k])
       N[i,k,t]~dpois(mu[i,k,t-1])
       }
       }
@@ -204,8 +204,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       lambda[i,k]<-muL[i,k]*eta[k]
       log(muL[i,k])<-beta[k]
       for(t in 2:nyear){
-      mu[i,k,t-1]<-N[i,k,t-1]*exp(r[k]*(1-(N[i,k,t-1]/K[k])))
-      #mu[i,k,t-1]<-r[k]*N[i,k,t-1]*((K[k]-N[i,k,t-1])/K[k])
+      #mu[i,k,t-1]<-N[i,k,t-1]*exp(r[k]*(1-(N[i,k,t-1]/K[k])))
+      mu[i,k,t-1]<-r[k]*N[i,k,t-1]*((K[k]-N[i,k,t-1])/K[k])
       N[i,k,t]~dpois(mu[i,k,t-1])
       }
       }
