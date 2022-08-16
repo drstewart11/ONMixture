@@ -19,16 +19,17 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   mgmt$yr<-as.numeric(as.factor(mgmt$year))
   hab$pname<-as.numeric(as.factor(hab$pond_name))
   hab$yr<-as.numeric(as.factor(hab$year))
+  count$YC_small[is.na(count$YC_small)] <- mean(count$YC_small,na.rm=TRUE)
+  count$BS_small[is.na(count$BS_small)] <- mean(count$BS_small,na.rm=TRUE)
+  count$YT_small[is.na(count$YT_small)] <- mean(count$YT_small,na.rm=TRUE)
 
   #Reorganize count data by Site, Wetland Pond, Year, and Species
   if(species=="YCHUB"){
     newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,site=count$site,y=count$YC_small)
-    newdat$y[is.na(newdat$y)] <- mean(newdat$y, na.rm = TRUE)  # Replace NA in one column
     newdat<-newdat %>% group_by(pname,year,site) %>% summarise(y=mean(y))
     countdata<-newdat[order(newdat$year,newdat$pname,newdat$site),]
   }else if(species=="BSHINER"){
     newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,site=count$site,y=count$BS_small)
-    newdat$y[is.na(newdat$y)] <- mean(newdat$y, na.rm = TRUE)  # Replace NA in one column
     newdat<-newdat %>% group_by(pname,year,site) %>% summarise(y=mean(y))
     countdata<-newdat[order(newdat$year,newdat$pname,newdat$site),]
   }
@@ -62,7 +63,6 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   newhab<-data.frame(pname=hab$pname,year=hab$yr,site=hab$site,pH=hab$pH,wtemp=hab$wtemp,
                      doxygen=hab$doxygen,wcond=hab$wcond,ntu=hab$ntu,algal=hab$algal,veg=hab$veg,
                      wdepth=hab$wdepth)
-
   #Reorder habitat data
   habdata<-newhab[order(newhab$year,newhab$pname,newhab$site),]
   habdata<-data.table(pname=habdata$pname,year=habdata$year,site=habdata$site,
