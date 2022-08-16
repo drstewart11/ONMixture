@@ -23,10 +23,12 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Reorganize count data by Site, Wetland Pond, Year, and Species
   if(species=="YCHUB"){
     newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,site=count$site,y=count$YC_small)
+    newdat$y[is.na(newdat$y)] <- mean(newdat$y, na.rm = TRUE)  # Replace NA in one column
     newdat<-newdat %>% group_by(pname,year,site) %>% summarise(y=mean(y))
     countdata<-newdat[order(newdat$year,newdat$pname,newdat$site),]
   }else if(species=="BSHINER"){
     newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,site=count$site,y=count$BS_small)
+    newdat$y[is.na(newdat$y)] <- mean(newdat$y, na.rm = TRUE)  # Replace NA in one column
     newdat<-newdat %>% group_by(pname,year,site) %>% summarise(y=mean(y))
     countdata<-newdat[order(newdat$year,newdat$pname,newdat$site),]
   }
