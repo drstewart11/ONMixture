@@ -13,6 +13,10 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #pname is a numeric wetland pond field
   #yr is a numeric year field
 
+  count = count %>% filter(include == 1)
+  mgmt = mgmt %>% filter(include == 1)
+  hab = mgmt %>% filter(include == 1)
+
   count$pname<-as.numeric(as.factor(count$pond_name))
   count$yr<-as.numeric(as.factor(count$year))
   mgmt$pname<-as.numeric(as.factor(mgmt$pond_name))
@@ -50,7 +54,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Reorganize management activity data by Site, Wetland Pond, and Year
   newmgmt<-data.frame(pname=mgmt$pname,year=mgmt$yr,ychubrem=mgmt$YCHUB_removed,
                       bshinerrem=mgmt$BSHINER_removed,ytoprem=mgmt$YTOP_removed,ychubstock=mgmt$YCHUB_stocked,
-                      bshinerstock=mgmt$BSHINER_stocked,ytopstock=mgmt$YTOP_stocked)
+                      bshinerstock=mgmt$BSHINER_stocked,ytopstock=mgmt$YTOP_stocked,include=mgmt$include)
 
   #Reorder management activity data
   mgmtdata<-newmgmt[order(newmgmt$year,newmgmt$pname),]

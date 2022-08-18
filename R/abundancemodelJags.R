@@ -16,10 +16,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #yr is a numeric year field
   count$pname<-as.numeric(as.factor(count$pond_name))
   count$yr<-as.numeric(as.factor(count$year))
-  mgmt$pname<-as.numeric(as.factor(mgmt$pond_name))
-  mgmt$yr<-as.numeric(as.factor(mgmt$year))
-  hab$pname<-as.numeric(as.factor(hab$pond_name))
-  hab$yr<-as.numeric(as.factor(hab$year))
+
 
   #Reorganize count data by Site, Wetland Pond, Year, and Species
   if(species=="YCHUB"){
@@ -45,98 +42,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Define and create 4 dimensional array
   #Read observed count data into 4-d array
   y=array(as.numeric(countdata$y),c(nsite,nday,npond,nyear))
-
-  #Reorganize management activity data by Site, Wetland Pond, and Year
-  newmgmt<-data.frame(pname=mgmt$pname,year=mgmt$yr,ychubrem=mgmt$YCHUB_removed,
-                      bshinerrem=mgmt$BSHINER_removed,ytoprem=mgmt$YTOP_removed,
-                      ychubstock=mgmt$YCHUB_stocked,
-                      bshinerstock=mgmt$BSHINER_stocked,
-                      ytopstock=mgmt$YTOP_stocked)
-
-  #Reorder management activity data
-  mgmtdata<-newmgmt[order(newmgmt$year,newmgmt$pname),]
-
-  #Expand data.frame
-  mgmtdat<-mgmtdata %>% group_by(pname,year,ychubrem,bshinerrem,ytoprem,
-                                 ychubstock,bshinerstock,ytopstock) %>% expand(sites = 1:10)
-
-  #Number of Yaqui chub removed
-  ychubrem=scale(mgmtdat$ychubrem)
-  ychubrem=array(ychubrem,c(nsite,npond,nyear))
-
-  #Number of beautiful shiner removed
-  bshinerem=scale(mgmtdat$bshinerrem)
-  bshinerem=array(bshinerem,c(nsite,npond,nyear))
-
-  #Number of Yaqui topminnow removed
-  ytoprem=scale(mgmtdat$ytoprem)
-  ytoprem=array(ytoprem,c(nsite,npond,nyear))
-
-  #Number of Yaqui chub stocked
-  ychubstock=scale(mgmt$YCHUB_stocked)
-  ychubstock=array(ychubstock,c(nsite,npond,nyear))
-
-  #Number of beautiful shiner stocked
-  bshinestock=scale(mgmtdat$bshinerstock)
-  bshinestock=array(bshinestock,c(nsite,npond,nyear))
-
-  #Number of Yaqui topminnow stocked
-  ytopstock=scale(mgmtdat$ytopstock)
-  ytopstock=array(ytopstock,c(nsite,npond,nyear))
-
-
-  #Reorganize habitat data by Site, Wetland Pond, and Year
-  newhab<-data.frame(pname=hab$pname,year=hab$yr,site=hab$site,
-                     pH=hab$pH,wtemp=hab$wtemp,
-                     doxygen=hab$doxygen,wcond=hab$wcond,
-                     ntu=hab$ntu,algal=hab$algal,veg=hab$veg,
-                     wdepth=hab$wdepth)
-
-  #Reorder habitat data
-  habdata<-newhab[order(newhab$year,newhab$pname,newhab$site),]
-  habdata<-data.table(pH=as.numeric(habdata$pH),
-                      wtemp=as.numeric(habdata$wtemp),
-                      doxygen=as.numeric(habdata$doxygen),
-                      wcond=as.numeric(habdata$wcond),
-                      ntu=as.numeric(habdata$ntu),
-                      algal=as.numeric(habdata$algal),
-                      veg=as.numeric(habdata$veg),
-                      wdepth=as.numeric(habdata$wdepth))
-
-  habdata<-setnafill(habdata, type = "locf")
-
-  #Scale habitat variables with mean 0 and input into a 3 dimensional array
-  #pH
-  pH=scale(habdata$pH)
-  pH=array(pH,c(nsite,npond,nyear))
-
-  #Water temperature
-  wtemp=scale(habdata$wtemp)
-  wtemp=array(wtemp,c(nsite,npond,nyear))
-
-  #Dissolved oxygen
-  doxygen=scale(habdata$doxygen)
-  doxygen=array(doxygen,c(nsite,npond,nyear))
-
-  #Water conductivity
-  wcond=scale(habdata$wcond)
-  wcond=array(wcond,c(nsite,npond,nyear))
-
-  #Turbidity
-  ntu=scale(habdata$ntu)
-  ntu=array(ntu,c(nsite,npond,nyear))
-
-  #Algae concentration
-  #algal=scale(habdata$algal)
-  #algal=array(algal,c(nsite,npond,nyear))
-
-  #Percent submergent aquatic vegetation
-  veg=scale(habdata$veg)
-  veg=array(veg,c(nsite,npond,nyear))
-
-  #Water depth
-  wdepth=scale(habdata$wdepth)
-  wdepth=array(wdepth,c(nsite,npond,nyear))
 
   print("Initiate Bayesian Population Model. This may take several minutes to hours.",quote=FALSE)
 
@@ -349,6 +254,155 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   }
 
   print("Bayesian Population Model Complete",quote=FALSE)
+
+
+  #Reorganize management activity data by Site, Wetland Pond, and Year
+  newmgmt<-data.frame(pond_name=mgmt$pond_name,year=mgmt$year,ychubrem=mgmt$YCHUB_removed,
+                      bshinerrem=mgmt$BSHINER_removed,ytoprem=mgmt$YTOP_removed,
+                      ychubstock=mgmt$YCHUB_stocked,
+                      bshinerstock=mgmt$BSHINER_stocked,
+                      ytopstock=mgmt$YTOP_stocked,include=mgmt$include)
+
+  #Filter
+  mgmtdat1<-newmgmt %>% filter(include == 1)
+
+  mgmtdat1$pname<-as.numeric(as.factor(mgmtdat1$pond_name))
+  mgmtdat1$yr<-as.numeric(as.factor(mgmtdat1$year))
+
+  #Reorder management activity data
+  mgmtdata<-mgmtdat1[order(mgmtdat1$year,mgmtdat1$pname),]
+
+  #Expand data.frame
+  mgmtdat<-mgmtdata %>% group_by(pname,year,ychubrem,bshinerrem,ytoprem,
+                                 ychubstock,bshinerstock,ytopstock) %>% expand(sites = 1:10)
+
+
+  #Number of Yaqui chub removed
+  ychubrem=scale(mgmtdat$ychubrem)
+  ychubrem=array(ychubrem,c(nsite,npond,nyear))
+
+  #Number of beautiful shiner removed
+  bshinerem=scale(mgmtdat$bshinerrem)
+  bshinerem=array(bshinerem,c(nsite,npond,nyear))
+
+  #Number of Yaqui topminnow removed
+  ytoprem=scale(mgmtdat$ytoprem)
+  ytoprem=array(ytoprem,c(nsite,npond,nyear))
+
+  #Number of Yaqui chub stocked
+  ychubstock=scale(mgmt$YCHUB_stocked)
+  ychubstock=array(ychubstock,c(nsite,npond,nyear))
+
+  #Number of beautiful shiner stocked
+  bshinestock=scale(mgmtdat$bshinerstock)
+  bshinestock=array(bshinestock,c(nsite,npond,nyear))
+
+  #Number of Yaqui topminnow stocked
+  ytopstock=scale(mgmtdat$ytopstock)
+  ytopstock=array(ytopstock,c(nsite,npond,nyear))
+
+
+  #Reorganize habitat data by Site, Wetland Pond, and Year
+  newhab<-data.frame(pond_name=hab$pond_name,year=hab$year,site=hab$site,
+                     pH=hab$pH,wtemp=hab$wtemp,
+                     doxygen=hab$doxygen,wcond=hab$wcond,
+                     ntu=hab$ntu,algal=hab$algal,veg=hab$veg,
+                     wdepth=hab$wdepth,include=hab$include)
+
+  #Filter
+  habdat1<-newhab %>% filter(include == 1)
+
+  habdat1$pname<-as.numeric(as.factor(habdat1$pond_name))
+  habdat1$yr<-as.numeric(as.factor(habdat1$year))
+
+  #Reorder habitat data
+  habdata<-habdat1[order(habdat1$year,habdat1$pname,habdat1$site),]
+
+  habdata<-data.table(pH=as.numeric(habdata$pH),
+                      wtemp=as.numeric(habdata$wtemp),
+                      doxygen=as.numeric(habdata$doxygen),
+                      wcond=as.numeric(habdata$wcond),
+                      ntu=as.numeric(habdata$ntu),
+                      algal=as.numeric(habdata$algal),
+                      veg=as.numeric(habdata$veg),
+                      wdepth=as.numeric(habdata$wdepth))
+
+  habdata<-setnafill(habdata, type = "locf")
+
+
+
+
+  #Scale habitat variables with mean 0 and input into a 3 dimensional array
+  #pH
+  pH=scale(habdata$pH)
+  pH=array(pH,c(nsite,npond,nyear))
+
+  #Water temperature
+  wtemp=scale(habdata$wtemp)
+  wtemp=array(wtemp,c(nsite,npond,nyear))
+
+  #Dissolved oxygen
+  doxygen=scale(habdata$doxygen)
+  doxygen=array(doxygen,c(nsite,npond,nyear))
+
+  #Water conductivity
+  wcond=scale(habdata$wcond)
+  wcond=array(wcond,c(nsite,npond,nyear))
+
+  #Turbidity
+  ntu=scale(habdata$ntu)
+  ntu=array(ntu,c(nsite,npond,nyear))
+
+  #Algae concentration
+  #algal=scale(habdata$algal)
+  #algal=array(algal,c(nsite,npond,nyear))
+
+  #Percent submergent aquatic vegetation
+  veg=scale(habdata$veg)
+  veg=array(veg,c(nsite,npond,nyear))
+
+  #Water depth
+  wdepth=scale(habdata$wdepth)
+  wdepth=array(wdepth,c(nsite,npond,nyear))
+
+  #Add pname field to count, mgmt, and hab .csv files
+  #pname is a numeric wetland pond field
+  #yr is a numeric year field
+  count$pname<-as.numeric(as.factor(count$pond_name))
+  count$yr<-as.numeric(as.factor(count$year))
+
+
+  #Reorganize count data by Site, Wetland Pond, Year, and Species
+  if(species=="YCHUB"){
+    newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
+                       site=count$site,y=count$YCHUB,include=count$include,pond.name=count$pond_name)
+    countdata<-newdat[order(newdat$year,newdat$pname,newdat$day,newdat$site),]
+  }else if(species=="BSHINER"){
+    newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
+                       site=count$site,y=count$BSHINER)
+    countdata<-newdat[order(newdat$year,newdat$pname,newdat$day,newdat$site),]
+  }
+
+
+  #Filter
+  countdat1<-countdata %>% filter(include == 1)
+  countdat1$pname1<-as.numeric(as.factor(countdat1$pond.name))
+
+  #Define 4-dimensional array dimensions
+  #nsite = the twenty sites within a wetland pond
+  #npond= 11 wetland ponds
+  #nday = three survey days
+  #nyear = the number of survey years
+  nsite=max(countdat1$site)
+  npond=max(countdat1$pname)
+  nday=max(countdat1$day)
+  nyear=max(countdat1$year)
+
+  #Define and create 4 dimensional array
+  #Read observed count data into 4-d array
+  y=array(as.numeric(countdata$y),c(nsite,nday,npond,nyear))
+
+
   print("Executing JAGS model to assess relationships with select habitat variables. This may take several minutes to hours.",quote=FALSE)
 
   #Define model file name and create JAGS model to assess relationships with
