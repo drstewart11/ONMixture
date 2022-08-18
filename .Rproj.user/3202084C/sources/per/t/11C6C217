@@ -3,7 +3,7 @@
     "path": "~/ONMixture/R/betamodelStan.R",
     "project_path": "R/betamodelStan.R",
     "type": "r_source",
-    "hash": "2922931795",
+    "hash": "72588277",
     "contents": "",
     "dirty": false,
     "created": 1654701090673.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled2",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "23,46",
+        "cursorPosition": "23,44",
         "scrollLine": "2"
     },
     "folds": "",
-    "lastKnownWriteTime": 1660786440,
+    "lastKnownWriteTime": 1660834086,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1660786440691,
+    "last_content_update": 1660834086727,
     "read_only": false,
     "read_only_alternatives": []
 }
