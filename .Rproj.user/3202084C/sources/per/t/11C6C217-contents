@@ -13,9 +13,9 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #pname is a numeric wetland pond field
   #yr is a numeric year field
 
-  count = countdat %>% filter(include == 1)
-  mgmt = mgmtdat %>% filter(include == 1)
-  hab = habdat %>% filter(include == 1)
+  count = count %>% filter(include == 1)
+  mgmt = mgmt %>% filter(include == 1)
+  hab = hab %>% filter(include == 1)
 
   count$pname<-as.numeric(as.factor(count$pond_name))
   count$yr<-as.numeric(as.factor(count$year))
@@ -66,7 +66,8 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Reorganize habitat data by Site, Wetland Pond, and Year
   newhab<-data.frame(pname=hab$pname,year=hab$yr,site=hab$site,pH=hab$pH,wtemp=hab$wtemp,
                      doxygen=hab$doxygen,wcond=hab$wcond,ntu=hab$ntu,algal=hab$algal,veg=hab$veg,
-                     wdepth=hab$wdepth)
+                     wdepth=hab$wdepth,include=hab$include)
+
   #Reorder habitat data
   habdata<-newhab[order(newhab$year,newhab$pname,newhab$site),]
   habdata<-data.table(pname=habdata$pname,year=habdata$year,site=habdata$site,
