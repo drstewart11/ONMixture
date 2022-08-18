@@ -360,8 +360,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       #Abundance parameters
       beta.depth~dnorm(0,0.01)
       beta.oxygen~dnorm(0,0.01)
-      beta.cond~dnorm(0,0.01)
-      beta.ntu~dnorm(0,0.01)
+      beta.veg~dnorm(0,0.01)
+      #beta.ntu~dnorm(0,0.01)
       #beta.algal~dnorm(0,0.01)
       #Detection parameters
       alpha~dnorm(0,0.01)
@@ -381,8 +381,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       N[i,k,t]~dpois(lambda[i,k,t])
       lambda[i,k,t]<-muL[i,k,t]*eta[i]
       log(muL[i,k,t])<-beta[k] + beta.depth*wdepth[i,k,t] +
-      beta.oxygen*doxygen[i,k,t] + beta.cond*wcond[i,k,t] +
-      beta.ntu*ntu[i,k,t]
+      beta.oxygen*doxygen[i,k,t] + beta.veg*veg[i,k,t]
       }}}
       for(i in 1:nsite){
       for(j in 1:nrep){
@@ -401,11 +400,10 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   #Bundle data
   ndata=list(y=y,nsite=nsite,nrep=nday,npond=npond,nyear=nyear,
-             wdepth=wdepth,veg=veg,wtemp=wtemp,wcond=wcond,doxygen=doxygen,
-             ntu=ntu)
+             wdepth=wdepth,veg=veg,wtemp=wtemp,wcond=wcond,doxygen=doxygen)
 
   #Parameters monitored
-  params=c("phi","beta","beta.depth","beta.oxygen","beta.cond","beta.ntu",
+  params=c("phi","beta","beta.depth","beta.oxygen","beta.veg",
            "alpha.depth","alpha.temp","alpha.veg","sd_pond")
 
   #MCMC settings
@@ -471,12 +469,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   Ncond.upper<-round(unlist(out2$q97.5$beta.cond),2)
   Ncond.upper<-as.vector(Ncond.upper)
 
-  N.ntu<-round(unlist(out2$mean$beta.ntu),2)
-  N.ntu<-as.vector(N.ntu)
-  Nntu.lower<-round(unlist(out2$q2.5$beta.ntu),2)
-  Nntu.lower<-as.vector(Nntu.lower)
-  Nntu.upper<-round(unlist(out2$q97.5$beta.ntu),2)
-  Nntu.upper<-as.vector(Nntu.upper)
+  N.veg<-round(unlist(out2$mean$beta.veg),2)
+  N.veg<-as.vector(N.veg)
+  Nveg.lower<-round(unlist(out2$q2.5$beta.veg),2)
+  Nveg.lower<-as.vector(Nveg.lower)
+  Nveg.upper<-round(unlist(out2$q97.5$beta.veg),2)
+  Nveg.upper<-as.vector(Nveg.upper)
 
   #N.algal<-round(unlist(out2$mean$beta.algal),2)
   #N.algal<-as.vector(N.algal)
@@ -485,11 +483,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Nalgal.upper<-round(unlist(out2$q97.5$beta.algal),2)
   #Nalgal.upper<-as.vector(Nalgal.upper)
 
-  N.mean<-c(N.depth,N.oxygen,N.cond,N.ntu)
-  N.lower<-c(NDepth.lower,Noxygen.lower,Ncond.lower,Nntu.lower)
-  N.upper<-c(NDepth.upper,Noxygen.upper,Ncond.upper,Nntu.upper)
+  N.mean<-c(N.depth,N.oxygen,N.cond,N.veg)
+  N.lower<-c(NDepth.lower,Noxygen.lower,Ncond.lower,Nveg.lower)
+  N.upper<-c(NDepth.upper,Noxygen.upper,Ncond.upper,Nveg.upper)
   Variable<-c("Water Depth","Dissolved Oxygen","Water Conductivity",
-              "NTU")
+              "Veg")
   Parameter<-rep(c("Abundance"),4)
 
   res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
