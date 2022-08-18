@@ -19,9 +19,9 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   mgmt$yr<-as.numeric(as.factor(mgmt$year))
   hab$pname<-as.numeric(as.factor(hab$pond_name))
   hab$yr<-as.numeric(as.factor(hab$year))
-  count$YC_small[is.na(count$YC_small)] <- 0.2
-  count$BS_small[is.na(count$BS_small)] <- 0.2
-  count$YT_small[is.na(count$YT_small)] <- 0.2
+  count$YC_small[is.na(count$YC_small)] <- 0.12
+  count$BS_small[is.na(count$BS_small)] <- 0.12
+  count$YT_small[is.na(count$YT_small)] <- 0.12
 
   #Reorganize count data by Site, Wetland Pond, Year, and Species
   if(species=="YCHUB"){
