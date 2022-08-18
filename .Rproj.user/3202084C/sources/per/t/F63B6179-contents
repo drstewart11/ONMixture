@@ -93,7 +93,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     cat("
       model{
       phi~dunif(0,100)
-      alpha_veg~dnorm(0,0.5)
+      #alpha_veg~dnorm(0,0.5)
       #alpha_depth~dnorm(0,0.5)
       #alpha_temp~dnorm(0,0.5)
       alpha~dnorm(0,0.5)
@@ -141,7 +141,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   jags.inits=function()list(N=Nst)
 
   #Bundle data
-  jags.data=list(y=y,nsite=nsite,nrep=nday,npond=npond,nyear=nyear,veg=veg,wdepth=wdepth,wtemp=wtemp)
+  jags.data=list(y=y,nsite=nsite,nrep=nday,npond=npond,nyear=nyear)
 
   #Parameters monitored
   jags.params=c("phi","det.mean","K","r",
