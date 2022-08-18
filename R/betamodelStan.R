@@ -13,9 +13,9 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #pname is a numeric wetland pond field
   #yr is a numeric year field
 
-  count = count %>% filter(include == 1)
-  mgmt = mgmt %>% filter(include == 1)
-  hab = mgmt %>% filter(include == 1)
+  count = countdat %>% filter(include == 1)
+  mgmt = mgmtdat %>% filter(include == 1)
+  hab = habdat %>% filter(include == 1)
 
   count$pname<-as.numeric(as.factor(count$pond_name))
   count$yr<-as.numeric(as.factor(count$year))
