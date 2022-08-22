@@ -711,7 +711,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   #Parameters monitored
   params=c("phi","beta","beta.ytoprem","beta.ytopstock","beta.ychubrem","beta.ychubstock",
-           "beta.bshinerem","beta.bshinestock","alpha")
+           "beta.bshinerem","beta.bshinestock","alpha","sd_pond")
 
   #MCMC settings
   nc=4; nt=1; nb=15000; ni=75000
