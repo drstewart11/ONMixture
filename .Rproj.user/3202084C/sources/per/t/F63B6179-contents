@@ -332,7 +332,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   veg2=rowMeans(veg,na.rm=TRUE)
 
   #Water depth
-  wepth=scale(habdata$wdepth)
+  wdepth=scale(habdata$wdepth)
   wdepth=array(wdepth,c(nsite,2))
 
   wdepth2=rowMeans(wdepth, na.rm=TRUE)
