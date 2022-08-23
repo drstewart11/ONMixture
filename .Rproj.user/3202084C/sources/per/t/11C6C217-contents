@@ -119,7 +119,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
     print("mu_coef[1] = Intercept,
           mu_coef[2] = Vegetation,
-          mu_coef[3] = Depth,quote=FALSE)
+          mu_coef[3] = Depth",quote=FALSE)
 
     #fit_summary=summary(fit)
     #write.csv(print(fit_summary$fit),"PSmall_YCHUB_HabitatParameters.csv",row.names=F)
@@ -139,7 +139,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     #write.csv(print(fit_summary$summary),"PSmall_BSHINER_HabitatParameters.csv",row.names=F)
     print("mu_coef[1] = Intercept,
           mu_coef[2] = Vegetation,
-          mu_coef[3] = Depth,
+          mu_coef[3] = Depth",
           quote=FALSE)
     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))
     ggsave("PSmall_BSHINER.png",width = 5, height = 4, dpi = 300, units = "in")
