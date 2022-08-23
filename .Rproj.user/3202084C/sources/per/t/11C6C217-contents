@@ -86,13 +86,25 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   model = stan_model("zoibeta.stan")
 
+  nsite=length(countdata$y)
+  veg=scale(newhab$veg)
+  veg=veg[1:nsite]
+  depth=scale(newhab$depth)
+  depth=depth[1:nsite]
+  temp=scale(newhab$temp)
+  temp=temp[1:nsite]
+  ph=scale(newhab$ph)
+  ph=ph[1:nsite]
+  oxy=scale(newhab$oxy)
+  oxy=oxy[1:nsite]
+
   stan_data = list(n = length(countdata$y),
                    y = countdata$y,
-                   veg = newhab$veg,
-                   depth = newhab$depth,
-                   temp = newhab$temp,
-                   oxy = newhab$oxy,
-                   ph = newhab$ph)
+                   veg = veg,
+                   depth = depth,
+                   temp = temp,
+                   oxy = oxy,
+                   ph = ph)
 
   fit = sampling(
     model,
@@ -119,7 +131,8 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
     print("mu_coef[1] = Intercept,
           mu_coef[2] = Vegetation,
-          mu_coef[3] = Depth",quote=FALSE)
+          mu_coef[3] = Depth,
+          mu_coef[4] = Water Temperature",quote=FALSE)
 
     #fit_summary=summary(fit)
     #write.csv(print(fit_summary$fit),"PSmall_YCHUB_HabitatParameters.csv",row.names=F)
@@ -139,8 +152,9 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     #write.csv(print(fit_summary$summary),"PSmall_BSHINER_HabitatParameters.csv",row.names=F)
     print("mu_coef[1] = Intercept,
           mu_coef[2] = Vegetation,
-          mu_coef[3] = Depth",
-          quote=FALSE)
+          mu_coef[3] = Depth,
+          mu_coef[4] = Water Temperature",quote=FALSE)
+
     print(stan_plot(fit, pars=c("mu_coef"), include = TRUE))
     ggsave("PSmall_BSHINER.png",width = 5, height = 4, dpi = 300, units = "in")
   }
