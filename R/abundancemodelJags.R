@@ -221,7 +221,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     plot<-ggplot(NQresults,aes(as.factor(Year),Pop_estimate,colour=factor(WetlandPond)))+
       geom_point(size=4)+
       geom_errorbar(aes(ymin=NLower95,ymax=NUpper95),width=.2,size=1.5)+
-      facet_wrap(~WetlandPond,ncol=7,scales="free_y")+
+      facet_wrap(~WetlandPond,ncol=7)+
       guides(colour="none")+
       theme_bw()+
       xlab("Year")+
@@ -240,7 +240,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     plot<-ggplot(NQresults,aes(as.factor(Year),Pop_estimate,colour=factor(WetlandPond)))+
       geom_point(size=4)+
       geom_errorbar(aes(ymin=NLower95,ymax=NUpper95),width=.2,size=1.5)+
-      facet_wrap(~WetlandPond,ncol=7,scales="free_y")+
+      facet_wrap(~WetlandPond,ncol=7)+
       guides(colour="none")+
       theme_bw()+
       xlab("Year")+
@@ -352,8 +352,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
   }else if(species=="BSHINER"){
     newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                       site=count$site,y=count$BSHINER)
-    countdata<-newdat[order(newdat$year,newdat$pname,newdat$day,newdat$site),]
+                       site=count$site,y=count$BSHINER,include=count$include,pond.name=count$pond_name)
+    countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
   }
 
 
