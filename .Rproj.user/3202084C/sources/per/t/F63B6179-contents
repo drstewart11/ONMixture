@@ -669,14 +669,14 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       beta.bshinestock~dnorm(0,0.01)
 
       #Detection parameters
-      #for(k in 1:npond){
-      alpha~dnorm(mu.alpha,tau.alpha)
+      alpha~dnorm(0,0.5)
 
-      #}
-
-      mu.alpha~dnorm(0,0.01)
-      tau.alpha~dgamma(0.1,0.1)
-      sd_pond<-1/tau.alpha
+      for(k in 1:nponds){
+      delta[k]~dnorm(mu.ponds,tau.ponds)
+      }
+      mu.ponds~dnorm(0,0.01)
+      tau.ponds~dgamma(0.1,0.1)
+      sd_pond<-1/tau.ponds
 
       for(i in 1:nsite){
       eta[i]~dgamma(phi,phi)
@@ -687,7 +687,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       log(muL[i])<-beta + beta.ytoprem*ytoprem[i] +
       beta.ytopstock*ytopstock[i] + beta.ychubrem*ychubrem[i] +
       beta.ychubstock*ychubstock[i] +
-      beta.bshinerem*bshinerem[i] + beta.bshinestock*bshinestock[i]
+      beta.bshinerem*bshinerem[i] + beta.bshinestock*bshinestock[i] +
+      delta[ponds[i]]
       }
 
       for(i in 1:nsite){
@@ -705,7 +706,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   inits=function()list(N=Nst,phi=10)
 
   #Bundle data
-  ndata=list(y=y,nsite=nsite,nrep=nrep,
+  ndata=list(y=y,nsite=nsite,nrep=nrep,nponds=nponds,ponds=ponds,
              ytoprem=ytoprem,ytopstock=ytopstock,ychubrem=ychubrem,ychubstock=ychubstock,
              bshinerem=bshinerem,bshinestock=bshinestock)
 
@@ -721,7 +722,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
              n.burnin=nb,n.thin=nt,n.iter=ni,parallel=TRUE,n.cores=nc,DIC=TRUE)
 
   #Create Wetland pond labels
-  pond.name<-rep(as.character(unique(unlist(sort(countdat$pond_name)))))
+  pond.name<-rep(as.character(unique(unlist(sort(countdat1$pond_name)))))
 
   #Summarize posteriors for abundance (beta parameters)
   N.ytopstock<-round(unlist(out2$mean$beta.ytopstock),2)
