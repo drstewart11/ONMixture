@@ -3,7 +3,7 @@
     "path": "~/ONMixture/R/abundancemodelJags.R",
     "project_path": "R/abundancemodelJags.R",
     "type": "r_source",
-    "hash": "2998308130",
+    "hash": "532435003",
     "contents": "",
     "dirty": false,
     "created": 1654701089051.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "777,33",
-        "scrollLine": "836"
+        "cursorPosition": "242,51",
+        "scrollLine": "228"
     },
     "folds": "",
-    "lastKnownWriteTime": 1661314589,
+    "lastKnownWriteTime": 1661314742,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1661314589102,
+    "last_content_update": 1661314742046,
     "read_only": false,
     "read_only_alternatives": []
 }
