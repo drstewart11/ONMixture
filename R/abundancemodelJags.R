@@ -562,7 +562,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   if(species=="YCHUB"){
 
     #Capture and Write results to working directory (R Data Files)
-    write.csv(res2,"YaquiChubSHabitatParameters.csv",row.names=F)
+    write.csv(res2,"YaquiChubSHabitatModelParameters.csv",row.names=F)
 
     plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
       geom_point(size=4)+
@@ -579,11 +579,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank())
     print(plot)
-    ggsave("YaquiChubWetlandPondParameterFigure.tiff",plot=plot,
+    ggsave("YaquiChubWetlandPondModelParameterFigure.tiff",plot=plot,
            width=12,height=7,dpi=300)
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
-    write.csv(res2,"BeautifulShinerHabitatParameters.csv",row.names=F)
+    write.csv(res2,"BeautifulShinerHabitatModelParameters.csv",row.names=F)
 
     plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
       geom_point(size=4)+
@@ -600,10 +600,14 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank())
     print(plot)
-    ggsave("BeautifulShinerWetlandPondParameterFigure.tiff",plot=plot,width=12,
+    ggsave("BeautifulShinerWetlandPondModelParameterFigure.tiff",plot=plot,width=12,
            height=7,dpi=300)
   }
-  print("Results for the Habitat Model are saved and stored in your working directory.",quote=FALSE)
+  print("Results for the Habitat Model Model are saved and stored in your working directory.",quote=FALSE)
+
+
+
+
   print("Executing JAGS model to assess relationships with select Management variables. This may take several minutes to hours.",quote=FALSE)
 
 
@@ -664,12 +668,192 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
       #Abundance parameters
       beta~dnorm(0,0.01)
+      #beta.ytoprem~dnorm(0,0.01)
+      beta.ytopstock~dnorm(0,0.01)
+      #beta.ychubrem~dnorm(0,0.01)
+      beta.ychubstock~dnorm(0,0.01)
+      #beta.bshinerem~dnorm(0,0.01)
+      beta.bshinerstock~dnorm(0,0.01)
+
+      #Detection parameters
+      alpha~dnorm(0,0.5)
+
+      for(k in 1:nponds){
+      delta[k]~dnorm(mu.ponds,tau.ponds)
+      }
+      mu.ponds~dnorm(0,0.01)
+      tau.ponds~dgamma(0.1,0.1)
+      sd_pond<-1/tau.ponds
+
+      for(i in 1:nsite){
+      eta[i]~dgamma(phi,phi)
+
+      N[i]~dpois(lambda[i])
+      lambda[i]<-muL[i]*eta[i]
+
+      log(muL[i])<-beta + beta.ytopstock*ytopstock[i] +
+      beta.ychubstock*ychubstock[i] +
+      beta.bshinerstock*bshinerstock[i] +
+      delta[ponds[i]]
+      }
+
+      for(i in 1:nsite){
+      for(j in 1:nrep){
+      y[i,j]~dbin(q[i,j],N[i])
+      #Detection probabilities
+      logit(q[i,j])<-alpha
+      }}
+
+      }",fill=TRUE,file=modelFilename)
+
+  #Initial values
+  #Nst<-apply(y,c(1,3,4),sum,na.rm=T)+1
+  Nst<-rowSums(y,na.rm=T)+1
+  inits=function()list(N=Nst,phi=10)
+
+  #Bundle data
+  ndata=list(y=y,nsite=nsite,nrep=nrep,nponds=nponds,ponds=ponds,
+             ytopstock=ytopstock,ychubstock=ychubstock,
+             bshinerstock=bshinerstock)
+
+  #Parameters monitored
+  params=c("phi","beta","beta.ytopstock","beta.ychubstock",
+           "beta.bshinerstock","alpha","sd_pond")
+
+  #MCMC settings
+  nc=4; nt=1; nb=15000; ni=75000
+
+  #Call JAGS
+  out2<-jags(ndata,inits,parameters.to.save=params,model.file=modelFilename,n.chains=nc,
+             n.burnin=nb,n.thin=nt,n.iter=ni,parallel=TRUE,n.cores=nc,DIC=TRUE)
+
+  #Create Wetland pond labels
+  pond.name<-rep(as.character(unique(unlist(sort(countdat1$pond_name)))))
+
+  #Summarize posteriors for abundance (beta parameters)
+  N.ytopstock<-round(unlist(out2$mean$beta.ytopstock),2)
+  N.ytopstock<-as.vector(N.ytopstock)
+  Nytopstock.lower<-round(unlist(out2$q2.5$beta.ytopstock),2)
+  Nytopstock.lower<-as.vector(Nytopstock.lower)
+  Nytopstock.upper<-round(unlist(out2$q97.5$beta.ytopstock),2)
+  Nytopstock.upper<-as.vector(Nytopstock.upper)
+
+  N.ychubstock<-round(unlist(out2$mean$beta.ychubstock),2)
+  N.ychubstock<-as.vector(N.ychubstock)
+  Nychubstock.lower<-round(unlist(out2$q2.5$beta.ychubstock),2)
+  Nychubstock.lower<-as.vector(Nychubstock.lower)
+  Nychubstock.upper<-round(unlist(out2$q97.5$beta.ychubstock),2)
+  Nychubstock.upper<-as.vector(Nychubstock.upper)
+
+  N.bshinestock<-round(unlist(out2$mean$beta.bshinestock),2)
+  N.bshinestock<-as.vector(N.bshinestock)
+  Nbshinestock.lower<-round(unlist(out2$q2.5$beta.bshinestock),2)
+  Nbshinestock.lower<-as.vector(Nbshinestock.lower)
+  Nbshinestock.upper<-round(unlist(out2$q97.5$beta.bshinestock),2)
+  Nbshinestock.upper<-as.vector(Nbshinestock.upper)
+
+  #N.mean<-c(N.ytopstock,N.ytoprem,N.ychubstock,N.ychubrem,N.bshinestock,N.bshinerem)
+  #N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower)
+  #N.upper<-c(Nytopstock.upper,Nytoprem.upper,Nychubstock.upper,Nychubrem.upper,Nbshinestock.upper,Nbshinerem.upper)
+
+  N.mean<-c(N.ytopstock,N.ychubstock,N.bshinerstock)
+  N.lower<-c(Nytopstock.lower,Nychubstock.lower,Nbshinerstock.lower)
+  N.upper<-c(Nytopstock.upper,Nychubstock.upper,Nbshinerstock.upper)
+  Variable<-c("Yaqui Topminnow Stocked",
+              "Yaqui Chub Stocked","Beautiful Shiner Stocked")
+  Parameter<-rep(c("Abundance"),3)
+
+  res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
+                     Mean=N.mean,Upper=N.upper)
+
+  phi.mu<-round(unlist(out2$mean$phi),2)
+  phi.mu<-as.vector(phi.mu)
+  phi.lower<-round(unlist(out2$q2.5$phi),2)
+  phi.lower<-as.vector(phi.lower)
+  phi.upper<-round(unlist(out2$q97.5$phi),2)
+  phi.upper<-as.vector(phi.upper)
+
+  sdpond.mu<-round(unlist(out2$mean$sd_pond),2)
+  sdpond.mu<-as.vector(sdpond.mu)
+  sdpond.lower<-round(unlist(out2$q2.5$sd_pond),2)
+  sdpond.lower<-as.vector(sdpond.lower)
+  sdpond.upper<-round(unlist(out2$q97.5$sd_pond),2)
+  sdpond.upper<-as.vector(sdpond.upper)
+
+  N.lower=c(phi.lower,sdpond.lower)
+  N.upper=c(phi.upper,sdpond.upper)
+  N.mean<-c(phi.mu,sdpond.mu)
+
+  Variable<-c("phi (Overdispersion and site-level effect)","Random pond stdev")
+  Parameter<-rep(c("Random Effect"),2)
+  res2.R<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
+                     Mean=N.mean,Upper=N.upper)
+
+  res2<-rbind(res2.N,res2.R)
+
+
+  if(species=="YCHUB"){
+
+    #Capture and Write results to working directory (R Data Files)
+    write.csv(res2,"YaquiChubManagementStockingParameters.csv",row.names=F)
+
+    plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
+      geom_point(size=4)+
+      geom_vline(aes(xintercept=0.0),color="black",size=1)+
+      geom_errorbarh(aes(xmin=Lower,xmax=Upper),height=.2,size=1)+
+      facet_wrap(~Parameter,ncol=2,scales="free_x")+
+      guides(colour="none")+
+      theme_bw()+
+      xlab("Parameter Estimate")+
+      ylab("")+
+      theme(axis.text=element_text(size=12),
+            axis.title=element_text(size=16),
+            strip.text.x=element_text(size=12),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank())
+    print(plot)
+    ggsave("YaquiChubWetlandManagementStockingParameterFigure.tiff",plot=plot,
+           width=12,height=7,dpi=300)
+  }else if(species=="BSHINER"){
+    #Capture and Write results to working directory (R Data Files)
+    write.csv(res2,"BeautifulShinerManagementStockingParameters.csv",row.names=F)
+
+    plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
+      geom_point(size=4)+
+      geom_vline(aes(xintercept=0.0),color="black",size=1)+
+      geom_errorbarh(aes(xmin=Lower,xmax=Upper),height=.2,size=1)+
+      facet_wrap(~Parameter,ncol=2,scales="free_x")+
+      guides(colour="none")+
+      theme_bw()+
+      xlab("Parameter Estimate")+
+      ylab("")+
+      theme(axis.text=element_text(size=12),
+            axis.title=element_text(size=16),
+            strip.text.x=element_text(size=12),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank())
+    print(plot)
+    ggsave("BeautifulShinerWetlandManagementStockingParameterFigure.tiff",plot=plot,width=12,
+           height=7,dpi=300)
+  }
+  print("Results of the Management Model (Stocking) are saved and stored in your working directory.",quote=FALSE)
+
+
+  #Define model file name and create JAGS model to assess relationships with
+  #known habitat variables
+  modelFilename="Management.Model.txt"
+  cat("
+      model{
+      phi~dunif(0.1,100)
+
+      #Abundance parameters
+      beta~dnorm(0,0.01)
       beta.ytoprem~dnorm(0,0.01)
       #beta.ytopstock~dnorm(0,0.01)
       beta.ychubrem~dnorm(0,0.01)
       #beta.ychubstock~dnorm(0,0.01)
       beta.bshinerem~dnorm(0,0.01)
-      #beta.bshinestock~dnorm(0,0.01)
+      #beta.bshinerstock~dnorm(0,0.01)
 
       #Detection parameters
       alpha~dnorm(0,0.5)
@@ -725,28 +909,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   #Create Wetland pond labels
   pond.name<-rep(as.character(unique(unlist(sort(countdat1$pond_name)))))
-
-  #Summarize posteriors for abundance (beta parameters)
-  #N.ytopstock<-round(unlist(out2$mean$beta.ytopstock),2)
-  #N.ytopstock<-as.vector(N.ytopstock)
-  #Nytopstock.lower<-round(unlist(out2$q2.5$beta.ytopstock),2)
-  #Nytopstock.lower<-as.vector(Nytopstock.lower)
-  #Nytopstock.upper<-round(unlist(out2$q97.5$beta.ytopstock),2)
-  #Nytopstock.upper<-as.vector(Nytopstock.upper)
-
-  #N.ychubstock<-round(unlist(out2$mean$beta.ychubstock),2)
-  #N.ychubstock<-as.vector(N.ychubstock)
-  #Nychubstock.lower<-round(unlist(out2$q2.5$beta.ychubstock),2)
-  #Nychubstock.lower<-as.vector(Nychubstock.lower)
-  #Nychubstock.upper<-round(unlist(out2$q97.5$beta.ychubstock),2)
-  #Nychubstock.upper<-as.vector(Nychubstock.upper)
-
-  #N.bshinestock<-round(unlist(out2$mean$beta.bshinestock),2)
-  #N.bshinestock<-as.vector(N.bshinestock)
-  #Nbshinestock.lower<-round(unlist(out2$q2.5$beta.bshinestock),2)
-  #Nbshinestock.lower<-as.vector(Nbshinestock.lower)
-  #Nbshinestock.upper<-round(unlist(out2$q97.5$beta.bshinestock),2)
-  #Nbshinestock.upper<-as.vector(Nbshinestock.upper)
 
   N.ytoprem<-round(unlist(out2$mean$beta.ytoprem),2)
   N.ytoprem<-as.vector(N.ytoprem)
@@ -812,7 +974,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   if(species=="YCHUB"){
 
     #Capture and Write results to working directory (R Data Files)
-    write.csv(res2,"YaquiChubManagementParameters.csv",row.names=F)
+    write.csv(res2,"YaquiChubManagementRemovedParameters.csv",row.names=F)
 
     plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
       geom_point(size=4)+
@@ -829,11 +991,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank())
     print(plot)
-    ggsave("YaquiChubWetlandManagementParameterFigure.tiff",plot=plot,
+    ggsave("YaquiChubWetlandManagementRemovedParameterFigure.tiff",plot=plot,
            width=12,height=7,dpi=300)
   }else if(species=="BSHINER"){
     #Capture and Write results to working directory (R Data Files)
-    write.csv(res2,"BeautifulShinerManagementParameters.csv",row.names=F)
+    write.csv(res2,"BeautifulShinerManagementRemovedParameters.csv",row.names=F)
 
     plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
       geom_point(size=4)+
@@ -850,13 +1012,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank())
     print(plot)
-    ggsave("BeautifulShinerWetlandManagementParameterFigure.tiff",plot=plot,width=12,
+    ggsave("BeautifulShinerWetlandManagementRemovedParameterFigure.tiff",plot=plot,width=12,
            height=7,dpi=300)
   }
-  print("Results of the Management Model are saved and stored in your working directory.",quote=FALSE)
+  print("Results of the Management Model (Removed) are saved and stored in your working directory.",quote=FALSE)
 
 
 
-
-  print("If needed please consult with the Regional Statistician (Dr. David R. Stewart) or the Regional Data Management Team once complete and if you have any concerns.")
+  print("If needed, please consult with the Regional Statistician (Dr. David R. Stewart) or the Regional Data Management Team once complete and if you have any concerns.")
 }
