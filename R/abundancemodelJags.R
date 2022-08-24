@@ -256,6 +256,9 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   print("Bayesian Population Model Complete",quote=FALSE)
 
 
+
+
+
 #############################################################################
 #############################################################################
 #############################################################################
@@ -904,6 +907,10 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   print("Executing JAGS model to assess relationships with select Management variables. This may take several minutes to hours.",quote=FALSE)
 
+
+
+
+
 ################################################################################
 ################################################################################
 ################################################################################
@@ -917,15 +924,25 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
 
     #Reorganize count data by Site, Wetland Pond, Year, and Species
-
-      newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                         site=count$site,y=count$YCHUB,include=count$include,pond.name=count$pond_name)
-      countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-
+    newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
+                       site=count$site,y=count$BSHINER,include=count$include,
+                       onrefuge=count$onrefuge,pond.name=count$pond_name)
+    countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
 
     #Filter
     countdat1<-countdata %>% filter(include == 1)
     countdat1$pname1<-as.numeric(as.factor(countdat1$pond.name))
+
+    #Define 3-dimensional array dimensions
+    #nsite = the twenty sites within a wetland pond
+    #npond= 11 wetland ponds
+    #nday = three survey days
+
+    nrep=max(countdat1$day)
+
+    #Define and create 4 dimensional array
+    #Read observed count data into 4-d array
+    y=array(as.numeric(countdat1$y),c(nsite,nrep))
 
 
   #Reorganize management activity data by Site, Wetland Pond, and Year
@@ -1302,22 +1319,31 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
     #Reorganize count data by Site, Wetland Pond, Year, and Species
     newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                         site=count$site,y=count$BSHINER,include=count$include,onrefuge=count$onrefuge,
-                       pond.name=count$pond_name)
-      countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-
-
+                       site=count$site,y=count$BSHINER,include=count$include,
+                       onrefuge=count$onrefuge,pond.name=count$pond_name)
+    countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
 
     #Filter
     countdat1<-countdata %>% filter(include == 1 & onrefuge == 1)
     countdat1$pname1<-as.numeric(as.factor(countdat1$pond.name))
 
+    #Define 3-dimensional array dimensions
+    #nsite = the twenty sites within a wetland pond
+    #npond= 11 wetland ponds
+    #nday = three survey days
+
+    nrep=max(countdat1$day)
+
+    #Define and create 4 dimensional array
+    #Read observed count data into 4-d array
+    y=array(as.numeric(countdat1$y),c(nsite,nrep))
     #Reorganize management activity data by Site, Wetland Pond, and Year
     newmgmt<-data.frame(pond_name=mgmt$pond_name,year=mgmt$year,ychubrem=mgmt$YCHUB_removed,
                         bshinerrem=mgmt$BSHINER_removed,ytoprem=mgmt$YTOP_removed,
                         ychubstock=mgmt$YCHUB_stocked,
                         bshinerstock=mgmt$BSHINER_stocked,
-                        ytopstock=mgmt$YTOP_stocked,include=mgmt$include)
+                        ytopstock=mgmt$YTOP_stocked,include=mgmt$include,
+                        onrefuge=mgmt$onrefuge)
 
     #Filter
     mgmtdat1<-newmgmt %>% filter(include == 1 & onrefuge == 1)
