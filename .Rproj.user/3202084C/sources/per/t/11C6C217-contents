@@ -134,12 +134,10 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     ggsave("PSmall_YCHUB.png",width = 5, height = 4, dpi = 300, units = "in")
 
   }else if(species=="BSHINER"){
-    newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,site=count$site,y=count$BS_small)
-    newdat<-newdat %>% group_by(pname,year,site) %>% summarise(y=mean(y))
-    countdata<-newdat[order(newdat$year,newdat$pname,newdat$site),]
+
     count = count %>% filter(include == 1 & onrefuge == 1)
     mgmt = mgmt %>% filter(include == 1 & onrefuge == 1)
-    hab = hab %>% filter(include == 1 & onrefuge == 1)
+    hab = hab %>% filter(include == 1 & onrefuge  == 1)
 
     count$pname<-as.numeric(as.factor(count$pond_name))
     count$yr<-as.numeric(as.factor(count$year))
@@ -150,6 +148,8 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     count$YC_small[is.na(count$YC_small)] <- 0
     count$BS_small[is.na(count$BS_small)] <- 0
     count$YT_small[is.na(count$YT_small)] <- 0
+
+
 
     #Reorganize count data by Site, Wetland Pond, Year, and Species
 
