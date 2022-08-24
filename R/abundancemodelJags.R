@@ -148,7 +148,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
                 "N.total")
 
   #MCMC settings
-  nc=4; nt=1; nb=15000; ni=500000
+  nc=4; nt=1; nb=15000; ni=200000
 
   out<-jags(jags.data,jags.inits,parameters.to.save=jags.params,
             model.file=modelFilename,n.chains=nc,
