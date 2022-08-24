@@ -1003,7 +1003,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       #Abundance parameters
       beta~dnorm(0,0.01)
       #beta.ytoprem~dnorm(0,0.01)
-      beta.ytopstock~dnorm(0,0.01)
+      #beta.ytopstock~dnorm(0,0.01)
       #beta.ychubrem~dnorm(0,0.01)
       beta.ychubstock~dnorm(0,0.01)
       #beta.bshinerem~dnorm(0,0.01)
@@ -1026,7 +1026,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       lambda[i]<-muL[i]*eta[i]
 
       log(muL[i])<-beta + beta.ytopstock*ytopstock[i] +
-      beta.ychubstock*ychubstock[i] +
       beta.bshinerstock*bshinerstock[i] +
       delta[ponds[i]]
       }
@@ -1047,11 +1046,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   #Bundle data
   ndata=list(y=y,nsite=nsite,nrep=nrep,nponds=nponds,ponds=ponds,
-             ytopstock=ytopstock,ychubstock=ychubstock,
+             ytopstock=ytopstock,
              bshinerstock=bshinerstock)
 
   #Parameters monitored
-  params=c("phi","beta","beta.ytopstock","beta.ychubstock",
+  params=c("phi","beta","beta.ytopstock",
            "beta.bshinerstock","alpha","sd_pond")
 
   #MCMC settings
@@ -1072,12 +1071,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   Nytopstock.upper<-round(unlist(out2$q97.5$beta.ytopstock),2)
   Nytopstock.upper<-as.vector(Nytopstock.upper)
 
-  N.ychubstock<-round(unlist(out2$mean$beta.ychubstock),2)
-  N.ychubstock<-as.vector(N.ychubstock)
-  Nychubstock.lower<-round(unlist(out2$q2.5$beta.ychubstock),2)
-  Nychubstock.lower<-as.vector(Nychubstock.lower)
-  Nychubstock.upper<-round(unlist(out2$q97.5$beta.ychubstock),2)
-  Nychubstock.upper<-as.vector(Nychubstock.upper)
+  #N.ychubstock<-round(unlist(out2$mean$beta.ychubstock),2)
+  #N.ychubstock<-as.vector(N.ychubstock)
+  #Nychubstock.lower<-round(unlist(out2$q2.5$beta.ychubstock),2)
+  #Nychubstock.lower<-as.vector(Nychubstock.lower)
+  #Nychubstock.upper<-round(unlist(out2$q97.5$beta.ychubstock),2)
+  #Nychubstock.upper<-as.vector(Nychubstock.upper)
 
   N.bshinerstock<-round(unlist(out2$mean$beta.bshinerstock),2)
   N.bshinerstock<-as.vector(N.bshinerstock)
@@ -1090,12 +1089,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower)
   #N.upper<-c(Nytopstock.upper,Nytoprem.upper,Nychubstock.upper,Nychubrem.upper,Nbshinestock.upper,Nbshinerem.upper)
 
-  N.mean<-c(N.ytopstock,N.ychubstock,N.bshinerstock)
-  N.lower<-c(Nytopstock.lower,Nychubstock.lower,Nbshinerstock.lower)
-  N.upper<-c(Nytopstock.upper,Nychubstock.upper,Nbshinerstock.upper)
+  N.mean<-c(N.ytopstock,N.bshinerstock)
+  N.lower<-c(Nytopstock.lower,Nbshinerstock.lower)
+  N.upper<-c(Nytopstock.upper,Nbshinerstock.upper)
   Variable<-c("Yaqui Topminnow Stocked",
-              "Yaqui Chub Stocked","Beautiful Shiner Stocked")
-  Parameter<-rep(c("Abundance"),3)
+              "Beautiful Shiner Stocked")
+  Parameter<-rep(c("Abundance"),2)
 
   res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
                      Mean=N.mean,Upper=N.upper)
@@ -1163,7 +1162,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       beta~dnorm(0,0.01)
       beta.ytoprem~dnorm(0,0.01)
       #beta.ytopstock~dnorm(0,0.01)
-      beta.ychubrem~dnorm(0,0.01)
+      #beta.ychubrem~dnorm(0,0.01)
       #beta.ychubstock~dnorm(0,0.01)
       beta.bshinerem~dnorm(0,0.01)
       #beta.bshinerstock~dnorm(0,0.01)
@@ -1185,7 +1184,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       lambda[i]<-muL[i]*eta[i]
 
       log(muL[i])<-beta + beta.ytoprem*ytoprem[i] +
-      beta.ychubrem*ychubrem[i] +
       beta.bshinerem*bshinerem[i] +
       delta[ponds[i]]
       }
@@ -1206,11 +1204,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
   #Bundle data
   ndata=list(y=y,nsite=nsite,nrep=nrep,nponds=nponds,ponds=ponds,
-             ytoprem=ytoprem,ychubrem=ychubrem,
+             ytoprem=ytoprem,
              bshinerem=bshinerem)
 
   #Parameters monitored
-  params=c("phi","beta","beta.ytoprem","beta.ychubrem",
+  params=c("phi","beta","beta.ytoprem",
            "beta.bshinerem","alpha","sd_pond")
 
   #MCMC settings
@@ -1230,12 +1228,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   Nytoprem.upper<-round(unlist(out2$q97.5$beta.ytoprem),2)
   Nytoprem.upper<-as.vector(Nytoprem.upper)
 
-  N.ychubrem<-round(unlist(out2$mean$beta.ychubrem),2)
-  N.ychubrem<-as.vector(N.ychubrem)
-  Nychubrem.lower<-round(unlist(out2$q2.5$beta.ychubrem),2)
-  Nychubrem.lower<-as.vector(Nychubrem.lower)
-  Nychubrem.upper<-round(unlist(out2$q97.5$beta.ychubrem),2)
-  Nychubrem.upper<-as.vector(Nychubrem.upper)
+  #N.ychubrem<-round(unlist(out2$mean$beta.ychubrem),2)
+  #N.ychubrem<-as.vector(N.ychubrem)
+  #Nychubrem.lower<-round(unlist(out2$q2.5$beta.ychubrem),2)
+  #Nychubrem.lower<-as.vector(Nychubrem.lower)
+  #Nychubrem.upper<-round(unlist(out2$q97.5$beta.ychubrem),2)
+  #Nychubrem.upper<-as.vector(Nychubrem.upper)
 
   N.bshinerem<-round(unlist(out2$mean$beta.bshinerem),2)
   N.bshinerem<-as.vector(N.bshinerem)
@@ -1252,8 +1250,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   N.lower<-c(Nytoprem.lower,Nychubrem.lower,Nbshinerem.lower)
   N.upper<-c(Nytoprem.upper,Nychubrem.upper,Nbshinerem.upper)
   Variable<-c("Yaqui Topminnow Removed",
-              "Yaqui Chub Removed","Beautiful Shiner Removed")
-  Parameter<-rep(c("Abundance"),3)
+              "Beautiful Shiner Removed")
+  Parameter<-rep(c("Abundance"),2)
 
   res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
                      Mean=N.mean,Upper=N.upper)
@@ -1400,7 +1398,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       #beta.ychubrem~dnorm(0,0.01)
       beta.ychubstock~dnorm(0,0.01)
       #beta.bshinerem~dnorm(0,0.01)
-      beta.bshinerstock~dnorm(0,0.01)
+      #beta.bshinerstock~dnorm(0,0.01)
 
       #Detection parameters
       alpha~dnorm(0,0.5)
@@ -1420,7 +1418,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
       log(muL[i])<-beta + beta.ytopstock*ytopstock[i] +
       beta.ychubstock*ychubstock[i] +
-      beta.bshinerstock*bshinerstock[i] +
       delta[ponds[i]]
       }
 
@@ -1440,12 +1437,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
     #Bundle data
     ndata=list(y=y,nsite=nsite,nrep=nrep,nponds=nponds,ponds=ponds,
-               ytopstock=ytopstock,ychubstock=ychubstock,
-               bshinerstock=bshinerstock)
+               ytopstock=ytopstock,ychubstock=ychubstock)
 
     #Parameters monitored
     params=c("phi","beta","beta.ytopstock","beta.ychubstock",
-             "beta.bshinerstock","alpha","sd_pond")
+             "alpha","sd_pond")
 
     #MCMC settings
     nc=4; nt=1; nb=15000; ni=75000
@@ -1472,23 +1468,23 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     Nychubstock.upper<-round(unlist(out2$q97.5$beta.ychubstock),2)
     Nychubstock.upper<-as.vector(Nychubstock.upper)
 
-    N.bshinerstock<-round(unlist(out2$mean$beta.bshinerstock),2)
-    N.bshinerstock<-as.vector(N.bshinerstock)
-    Nbshinerstock.lower<-round(unlist(out2$q2.5$beta.bshinerstock),2)
-    Nbshinerstock.lower<-as.vector(Nbshinerstock.lower)
-    Nbshinerstock.upper<-round(unlist(out2$q97.5$beta.bshinerstock),2)
-    Nbshinerstock.upper<-as.vector(Nbshinerstock.upper)
+    #N.bshinerstock<-round(unlist(out2$mean$beta.bshinerstock),2)
+    #N.bshinerstock<-as.vector(N.bshinerstock)
+    #Nbshinerstock.lower<-round(unlist(out2$q2.5$beta.bshinerstock),2)
+    #Nbshinerstock.lower<-as.vector(Nbshinerstock.lower)
+    #Nbshinerstock.upper<-round(unlist(out2$q97.5$beta.bshinerstock),2)
+    #Nbshinerstock.upper<-as.vector(Nbshinerstock.upper)
 
     #N.mean<-c(N.ytopstock,N.ytoprem,N.ychubstock,N.ychubrem,N.bshinestock,N.bshinerem)
     #N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower)
     #N.upper<-c(Nytopstock.upper,Nytoprem.upper,Nychubstock.upper,Nychubrem.upper,Nbshinestock.upper,Nbshinerem.upper)
 
-    N.mean<-c(N.ytopstock,N.ychubstock,N.bshinerstock)
-    N.lower<-c(Nytopstock.lower,Nychubstock.lower,Nbshinerstock.lower)
-    N.upper<-c(Nytopstock.upper,Nychubstock.upper,Nbshinerstock.upper)
+    N.mean<-c(N.ytopstock,N.ychubstock)
+    N.lower<-c(Nytopstock.lower,Nychubstock.lower)
+    N.upper<-c(Nytopstock.upper,Nychubstock.upper)
     Variable<-c("Yaqui Topminnow Stocked",
-                "Yaqui Chub Stocked","Beautiful Shiner Stocked")
-    Parameter<-rep(c("Abundance"),3)
+                "Yaqui Chub Stocked")
+    Parameter<-rep(c("Abundance"),2)
 
     res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
                        Mean=N.mean,Upper=N.upper)
@@ -1556,7 +1552,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       #beta.ytopstock~dnorm(0,0.01)
       beta.ychubrem~dnorm(0,0.01)
       #beta.ychubstock~dnorm(0,0.01)
-      beta.bshinerem~dnorm(0,0.01)
+      #beta.bshinerem~dnorm(0,0.01)
       #beta.bshinerstock~dnorm(0,0.01)
 
       #Detection parameters
@@ -1577,7 +1573,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
       log(muL[i])<-beta + beta.ytoprem*ytoprem[i] +
       beta.ychubrem*ychubrem[i] +
-      beta.bshinerem*bshinerem[i] +
       delta[ponds[i]]
       }
 
@@ -1597,12 +1592,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
     #Bundle data
     ndata=list(y=y,nsite=nsite,nrep=nrep,nponds=nponds,ponds=ponds,
-               ytoprem=ytoprem,ychubrem=ychubrem,
-               bshinerem=bshinerem)
+               ytoprem=ytoprem,ychubrem=ychubrem)
 
     #Parameters monitored
     params=c("phi","beta","beta.ytoprem","beta.ychubrem",
-             "beta.bshinerem","alpha","sd_pond")
+             "alpha","sd_pond")
 
     #MCMC settings
     nc=4; nt=1; nb=15000; ni=75000
@@ -1628,12 +1622,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     Nychubrem.upper<-round(unlist(out2$q97.5$beta.ychubrem),2)
     Nychubrem.upper<-as.vector(Nychubrem.upper)
 
-    N.bshinerem<-round(unlist(out2$mean$beta.bshinerem),2)
-    N.bshinerem<-as.vector(N.bshinerem)
-    Nbshinerem.lower<-round(unlist(out2$q2.5$beta.bshinerem),2)
-    Nbshinerem.lower<-as.vector(Nbshinerem.lower)
-    Nbshinerem.upper<-round(unlist(out2$q97.5$beta.bshinerem),2)
-    Nbshinerem.upper<-as.vector(Nbshinerem.upper)
+    #N.bshinerem<-round(unlist(out2$mean$beta.bshinerem),2)
+    #N.bshinerem<-as.vector(N.bshinerem)
+    #Nbshinerem.lower<-round(unlist(out2$q2.5$beta.bshinerem),2)
+    #Nbshinerem.lower<-as.vector(Nbshinerem.lower)
+    #Nbshinerem.upper<-round(unlist(out2$q97.5$beta.bshinerem),2)
+    #Nbshinerem.upper<-as.vector(Nbshinerem.upper)
 
     #N.mean<-c(N.ytopstock,N.ytoprem,N.ychubstock,N.ychubrem,N.bshinestock,N.bshinerem)
     #N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower)
@@ -1643,8 +1637,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     N.lower<-c(Nytoprem.lower,Nychubrem.lower,Nbshinerem.lower)
     N.upper<-c(Nytoprem.upper,Nychubrem.upper,Nbshinerem.upper)
     Variable<-c("Yaqui Topminnow Removed",
-                "Yaqui Chub Removed","Beautiful Shiner Removed")
-    Parameter<-rep(c("Abundance"),3)
+                "Yaqui Chub Removed")
+    Parameter<-rep(c("Abundance"),2)
 
     res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
                        Mean=N.mean,Upper=N.upper)
