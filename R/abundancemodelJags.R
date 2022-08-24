@@ -148,7 +148,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
                 "N.total")
 
   #MCMC settings
-  nc=4; nt=1; nb=15000; ni=200000
+  nc=4; nt=1; nb=15000; ni=50000
 
   out<-jags(jags.data,jags.inits,parameters.to.save=jags.params,
             model.file=modelFilename,n.chains=nc,
@@ -1050,7 +1050,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
            "beta.bshinerstock","alpha","sd_pond")
 
   #MCMC settings
-  nc=4; nt=1; nb=15000; ni=75000
+  nc=4; nt=1; nb=10000; ni=25000
 
   #Call JAGS
   out2<-jags(ndata,inits,parameters.to.save=params,model.file=modelFilename,n.chains=nc,
@@ -1060,11 +1060,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   pond.name<-rep(as.character(unique(unlist(sort(countdat1$pond_name)))))
 
   #Summarize posteriors for abundance (beta parameters)
-  N.ytopstock<-round(unlist(out2$mean$beta.ytopstock),2)
+  N.ytopstock<-round(unlist(out2$mean$beta.ytopstock),3)
   N.ytopstock<-as.vector(N.ytopstock)
-  Nytopstock.lower<-round(unlist(out2$q2.5$beta.ytopstock),2)
+  Nytopstock.lower<-round(unlist(out2$q2.5$beta.ytopstock),3)
   Nytopstock.lower<-as.vector(Nytopstock.lower)
-  Nytopstock.upper<-round(unlist(out2$q97.5$beta.ytopstock),2)
+  Nytopstock.upper<-round(unlist(out2$q97.5$beta.ytopstock),3)
   Nytopstock.upper<-as.vector(Nytopstock.upper)
 
   #N.ychubstock<-round(unlist(out2$mean$beta.ychubstock),2)
@@ -1074,11 +1074,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Nychubstock.upper<-round(unlist(out2$q97.5$beta.ychubstock),2)
   #Nychubstock.upper<-as.vector(Nychubstock.upper)
 
-  N.bshinerstock<-round(unlist(out2$mean$beta.bshinerstock),2)
+  N.bshinerstock<-round(unlist(out2$mean$beta.bshinerstock),3)
   N.bshinerstock<-as.vector(N.bshinerstock)
-  Nbshinerstock.lower<-round(unlist(out2$q2.5$beta.bshinerstock),2)
+  Nbshinerstock.lower<-round(unlist(out2$q2.5$beta.bshinerstock),3)
   Nbshinerstock.lower<-as.vector(Nbshinerstock.lower)
-  Nbshinerstock.upper<-round(unlist(out2$q97.5$beta.bshinerstock),2)
+  Nbshinerstock.upper<-round(unlist(out2$q97.5$beta.bshinerstock),3)
   Nbshinerstock.upper<-as.vector(Nbshinerstock.upper)
 
   #N.mean<-c(N.ytopstock,N.ytoprem,N.ychubstock,N.ychubrem,N.bshinestock,N.bshinerem)
@@ -1095,18 +1095,18 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
                      Mean=N.mean,Upper=N.upper)
 
-  phi.mu<-round(unlist(out2$mean$phi),2)
+  phi.mu<-round(unlist(out2$mean$phi),3)
   phi.mu<-as.vector(phi.mu)
-  phi.lower<-round(unlist(out2$q2.5$phi),2)
+  phi.lower<-round(unlist(out2$q2.5$phi),3)
   phi.lower<-as.vector(phi.lower)
-  phi.upper<-round(unlist(out2$q97.5$phi),2)
+  phi.upper<-round(unlist(out2$q97.5$phi),3)
   phi.upper<-as.vector(phi.upper)
 
-  sdpond.mu<-round(unlist(out2$mean$sd_pond),2)
+  sdpond.mu<-round(unlist(out2$mean$sd_pond),3)
   sdpond.mu<-as.vector(sdpond.mu)
-  sdpond.lower<-round(unlist(out2$q2.5$sd_pond),2)
+  sdpond.lower<-round(unlist(out2$q2.5$sd_pond),3)
   sdpond.lower<-as.vector(sdpond.lower)
-  sdpond.upper<-round(unlist(out2$q97.5$sd_pond),2)
+  sdpond.upper<-round(unlist(out2$q97.5$sd_pond),3)
   sdpond.upper<-as.vector(sdpond.upper)
 
   N.lower=c(phi.lower,sdpond.lower)
@@ -1205,7 +1205,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
            "beta.bshinerem","alpha","sd_pond")
 
   #MCMC settings
-  nc=4; nt=1; nb=15000; ni=75000
+  nc=4; nt=1; nb=10000; ni=25000
 
   #Call JAGS
   out2<-jags(ndata,inits,parameters.to.save=params,model.file=modelFilename,n.chains=nc,
@@ -1214,11 +1214,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Create Wetland pond labels
   pond.name<-rep(as.character(unique(unlist(sort(countdat1$pond_name)))))
 
-  N.ytoprem<-round(unlist(out2$mean$beta.ytoprem),2)
+  N.ytoprem<-round(unlist(out2$mean$beta.ytoprem),3)
   N.ytoprem<-as.vector(N.ytoprem)
-  Nytoprem.lower<-round(unlist(out2$q2.5$beta.ytoprem),2)
+  Nytoprem.lower<-round(unlist(out2$q2.5$beta.ytoprem),3)
   Nytoprem.lower<-as.vector(Nytoprem.lower)
-  Nytoprem.upper<-round(unlist(out2$q97.5$beta.ytoprem),2)
+  Nytoprem.upper<-round(unlist(out2$q97.5$beta.ytoprem),3)
   Nytoprem.upper<-as.vector(Nytoprem.upper)
 
   #N.ychubrem<-round(unlist(out2$mean$beta.ychubrem),2)
@@ -1228,20 +1228,20 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #Nychubrem.upper<-round(unlist(out2$q97.5$beta.ychubrem),2)
   #Nychubrem.upper<-as.vector(Nychubrem.upper)
 
-  N.bshinerem<-round(unlist(out2$mean$beta.bshinerem),2)
+  N.bshinerem<-round(unlist(out2$mean$beta.bshinerem),3)
   N.bshinerem<-as.vector(N.bshinerem)
-  Nbshinerem.lower<-round(unlist(out2$q2.5$beta.bshinerem),2)
+  Nbshinerem.lower<-round(unlist(out2$q2.5$beta.bshinerem),3)
   Nbshinerem.lower<-as.vector(Nbshinerem.lower)
-  Nbshinerem.upper<-round(unlist(out2$q97.5$beta.bshinerem),2)
+  Nbshinerem.upper<-round(unlist(out2$q97.5$beta.bshinerem),3)
   Nbshinerem.upper<-as.vector(Nbshinerem.upper)
 
   #N.mean<-c(N.ytopstock,N.ytoprem,N.ychubstock,N.ychubrem,N.bshinestock,N.bshinerem)
   #N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower)
   #N.upper<-c(Nytopstock.upper,Nytoprem.upper,Nychubstock.upper,Nychubrem.upper,Nbshinestock.upper,Nbshinerem.upper)
 
-  N.mean<-c(N.ytoprem,N.ychubrem,N.bshinerem)
-  N.lower<-c(Nytoprem.lower,Nychubrem.lower,Nbshinerem.lower)
-  N.upper<-c(Nytoprem.upper,Nychubrem.upper,Nbshinerem.upper)
+  N.mean<-c(N.ytoprem,N.bshinerem)
+  N.lower<-c(Nytoprem.lower,Nbshinerem.lower)
+  N.upper<-c(Nytoprem.upper,Nbshinerem.upper)
   Variable<-c("Yaqui Topminnow Removed",
               "Beautiful Shiner Removed")
   Parameter<-rep(c("Abundance"),2)
@@ -1249,18 +1249,18 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
                      Mean=N.mean,Upper=N.upper)
 
-  phi.mu<-round(unlist(out2$mean$phi),2)
+  phi.mu<-round(unlist(out2$mean$phi),3)
   phi.mu<-as.vector(phi.mu)
-  phi.lower<-round(unlist(out2$q2.5$phi),2)
+  phi.lower<-round(unlist(out2$q2.5$phi),3)
   phi.lower<-as.vector(phi.lower)
-  phi.upper<-round(unlist(out2$q97.5$phi),2)
+  phi.upper<-round(unlist(out2$q97.5$phi),3)
   phi.upper<-as.vector(phi.upper)
 
-  sdpond.mu<-round(unlist(out2$mean$sd_pond),2)
+  sdpond.mu<-round(unlist(out2$mean$sd_pond),3)
   sdpond.mu<-as.vector(sdpond.mu)
-  sdpond.lower<-round(unlist(out2$q2.5$sd_pond),2)
+  sdpond.lower<-round(unlist(out2$q2.5$sd_pond),3)
   sdpond.lower<-as.vector(sdpond.lower)
-  sdpond.upper<-round(unlist(out2$q97.5$sd_pond),2)
+  sdpond.upper<-round(unlist(out2$q97.5$sd_pond),3)
   sdpond.upper<-as.vector(sdpond.upper)
 
   N.lower=c(phi.lower,sdpond.lower)
@@ -1433,7 +1433,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
              "alpha","sd_pond")
 
     #MCMC settings
-    nc=4; nt=1; nb=15000; ni=75000
+    nc=4; nt=1; nb=10000; ni=25000
 
     #Call JAGS
     out2<-jags(ndata,inits,parameters.to.save=params,model.file=modelFilename,n.chains=nc,
