@@ -743,12 +743,12 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   Nychubstock.upper<-round(unlist(out2$q97.5$beta.ychubstock),2)
   Nychubstock.upper<-as.vector(Nychubstock.upper)
 
-  N.bshinestock<-round(unlist(out2$mean$beta.bshinestock),2)
-  N.bshinestock<-as.vector(N.bshinestock)
-  Nbshinestock.lower<-round(unlist(out2$q2.5$beta.bshinestock),2)
-  Nbshinestock.lower<-as.vector(Nbshinestock.lower)
-  Nbshinestock.upper<-round(unlist(out2$q97.5$beta.bshinestock),2)
-  Nbshinestock.upper<-as.vector(Nbshinestock.upper)
+  N.bshinerstock<-round(unlist(out2$mean$beta.bshinerstock),2)
+  N.bshinerstock<-as.vector(N.bshinerstock)
+  Nbshinerstock.lower<-round(unlist(out2$q2.5$beta.bshinerstock),2)
+  Nbshinerstock.lower<-as.vector(Nbshinerstock.lower)
+  Nbshinerstock.upper<-round(unlist(out2$q97.5$beta.bshinerstock),2)
+  Nbshinerstock.upper<-as.vector(Nbshinerstock.upper)
 
   #N.mean<-c(N.ytopstock,N.ytoprem,N.ychubstock,N.ychubrem,N.bshinestock,N.bshinerem)
   #N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower)
