@@ -148,7 +148,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
                 "N.total")
 
   #MCMC settings
-  nc=4; nt=1; nb=15000; ni=50000
+  nc=4; nt=1; nb=15000; ni=75000
 
   out<-jags(jags.data,jags.inits,parameters.to.save=jags.params,
             model.file=modelFilename,n.chains=nc,
@@ -1538,11 +1538,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       #Abundance parameters
       beta~dnorm(0,0.01)
       beta.ytoprem~dnorm(0,0.01)
-      #beta.ytopstock~dnorm(0,0.01)
       beta.ychubrem~dnorm(0,0.01)
-      #beta.ychubstock~dnorm(0,0.01)
-      #beta.bshinerem~dnorm(0,0.01)
-      #beta.bshinerstock~dnorm(0,0.01)
+
 
       #Detection parameters
       alpha~dnorm(0,0.5)
@@ -1622,9 +1619,9 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     #N.lower<-c(Nytopstock.lower,Nytoprem.lower,Nychubstock.lower,Nychubrem.lower,Nbshinestock.lower,Nbshinerem.lower)
     #N.upper<-c(Nytopstock.upper,Nytoprem.upper,Nychubstock.upper,Nychubrem.upper,Nbshinestock.upper,Nbshinerem.upper)
 
-    N.mean<-c(N.ytoprem,N.ychubrem,N.bshinerem)
-    N.lower<-c(Nytoprem.lower,Nychubrem.lower,Nbshinerem.lower)
-    N.upper<-c(Nytoprem.upper,Nychubrem.upper,Nbshinerem.upper)
+    N.mean<-c(N.ytoprem,N.ychubrem)
+    N.lower<-c(Nytoprem.lower,Nychubrem.lower)
+    N.upper<-c(Nytoprem.upper,Nychubrem.upper)
     Variable<-c("Yaqui Topminnow Removed",
                 "Yaqui Chub Removed")
     Parameter<-rep(c("Abundance"),2)
@@ -1632,18 +1629,18 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
                        Mean=N.mean,Upper=N.upper)
 
-    phi.mu<-round(unlist(out2$mean$phi),2)
+    phi.mu<-round(unlist(out2$mean$phi),3)
     phi.mu<-as.vector(phi.mu)
-    phi.lower<-round(unlist(out2$q2.5$phi),2)
+    phi.lower<-round(unlist(out2$q2.5$phi),3)
     phi.lower<-as.vector(phi.lower)
-    phi.upper<-round(unlist(out2$q97.5$phi),2)
+    phi.upper<-round(unlist(out2$q97.5$phi),3)
     phi.upper<-as.vector(phi.upper)
 
-    sdpond.mu<-round(unlist(out2$mean$sd_pond),2)
+    sdpond.mu<-round(unlist(out2$mean$sd_pond),3)
     sdpond.mu<-as.vector(sdpond.mu)
-    sdpond.lower<-round(unlist(out2$q2.5$sd_pond),2)
+    sdpond.lower<-round(unlist(out2$q2.5$sd_pond),3)
     sdpond.lower<-as.vector(sdpond.lower)
-    sdpond.upper<-round(unlist(out2$q97.5$sd_pond),2)
+    sdpond.upper<-round(unlist(out2$q97.5$sd_pond),3)
     sdpond.upper<-as.vector(sdpond.upper)
 
     N.lower=c(phi.lower,sdpond.lower)
