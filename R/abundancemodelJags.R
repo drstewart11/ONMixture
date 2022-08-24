@@ -222,8 +222,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     plot<-ggplot(NQresults,aes(as.factor(Year),Pop_estimate,colour=factor(WetlandPond)))+
       geom_point(size=4)+
       geom_errorbar(aes(ymin=NLower95,ymax=NUpper95),width=.2,size=1.5)+
-      ylim(0,5000)+
-      facet_wrap(~WetlandPond,ncol=7,scales="free_y")+
+      facet_wrap(~WetlandPond,ncol=7)+
       guides(colour="none")+
       theme_bw()+
       xlab("Year")+
@@ -242,7 +241,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     plot<-ggplot(NQresults,aes(as.factor(Year),Pop_estimate,colour=factor(WetlandPond)))+
       geom_point(size=4)+
       geom_errorbar(aes(ymin=NLower95,ymax=NUpper95),width=.2,size=1.5)+
-      ylim(0,5000)+
       facet_wrap(~WetlandPond,ncol=7,scales="free_y")+
       guides(colour="none")+
       theme_bw()+
