@@ -525,7 +525,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   N.lower<-c(NDepth.lower,Nwtemp.lower,Nveg.lower)
   N.upper<-c(NDepth.upper,Nwtemp.upper,Nveg.upper)
   Variable<-c("Water Depth","Water Temperature",
-              "Veg")
+              "Vegetation")
   Parameter<-rep(c("Abundance"),3)
 
   res2.N<-data.frame(Parameter=Parameter,Variable=Variable,Lower=N.lower,
