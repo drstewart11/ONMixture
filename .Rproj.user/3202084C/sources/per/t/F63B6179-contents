@@ -649,7 +649,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   #ychubstock=array(ychubstock,c(nsite,npond))
 
   #Number of beautiful shiner stocked
-  bshinestock=mgmtdat$bshinerstock
+  bshinerstock=mgmtdat$bshinerstock
   #bshinestock=array(bshinestock,c(nsite,npond))
 
   #Number of Yaqui topminnow stocked
