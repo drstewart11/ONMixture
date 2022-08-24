@@ -212,7 +212,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
                         KLower95=k.lower,Stable_Equilibrium=k.mean,
                         KUpper95=k.upper)
 
-
   if(species=="YCHUB"){
 
     #Capture and Write results to working directory (R Data Files)
@@ -255,6 +254,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   }
 
   print("Bayesian Population Model Complete",quote=FALSE)
+
+
+#############################################################################
+#############################################################################
+#############################################################################
 
 
   if(species=="YCHUB"){
@@ -349,16 +353,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
 
   #Reorganize count data by Site, Wetland Pond, Year, and Species
-  if(species=="YCHUB"){
-    newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                       site=count$site,y=count$YCHUB,include=count$include,pond.name=count$pond_name)
-    countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-  }else if(species=="BSHINER"){
-    newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                       site=count$site,y=count$BSHINER,include=count$include,pond.name=count$pond_name)
-    countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-  }
 
+    newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
+                       site=count$site,y=count$YCHUB,include=count$include,
+                       pond.name=count$pond_name)
+    countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
 
   #Filter
   countdat1<-countdata %>% filter(include == 1)
@@ -559,9 +558,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   res2<-rbind(res2.N,res2.D,res2.R)
 
 
-  if(species=="YCHUB"){
-
-    #Capture and Write results to working directory (R Data Files)
+  #Capture and Write results to working directory (R Data Files)
     write.csv(res2,"YaquiChubSHabitatModelParameters.csv",row.names=F)
 
     plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
@@ -581,37 +578,18 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     print(plot)
     ggsave("YaquiChubWetlandPondModelParameterFigure.tiff",plot=plot,
            width=12,height=7,dpi=300)
-  }else if(species=="BSHINER"){
-    #Capture and Write results to working directory (R Data Files)
-    write.csv(res2,"BeautifulShinerHabitatModelParameters.csv",row.names=F)
 
-    plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
-      geom_point(size=4)+
-      geom_vline(aes(xintercept=0.0),color="black",size=1)+
-      geom_errorbarh(aes(xmin=Lower,xmax=Upper),height=.2,size=1)+
-      facet_wrap(~Parameter,ncol=2,scales="free_x")+
-      guides(colour="none")+
-      theme_bw()+
-      xlab("Parameter Estimate")+
-      ylab("")+
-      theme(axis.text=element_text(size=12),
-            axis.title=element_text(size=16),
-            strip.text.x=element_text(size=12),
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank())
-    print(plot)
-    ggsave("BeautifulShinerWetlandPondModelParameterFigure.tiff",plot=plot,width=12,
-           height=7,dpi=300)
-  }
   print("Results for the Habitat Model Model are saved and stored in your working directory.",quote=FALSE)
 
   }else if(species=="BSHINER"){
+
+
     #Reorganize habitat data by Site, Wetland Pond, and Year
     newhab<-data.frame(pond_name=hab$pond_name,rep=hab$day,year=hab$year,site=hab$site,
                        pH=hab$pH,wtemp=hab$wtemp,
                        doxygen=hab$doxygen,wcond=hab$wcond,
                        ntu=hab$ntu,algal=hab$algal,veg=hab$veg,
-                       wdepth=hab$wdepth,include=hab$include)
+                       wdepth=hab$wdepth,include=hab$include,onrefuge=hab$onrefuge)
     #Filter
     habdat1<-newhab %>% filter(include == 1 & onrefuge == 1)
 
@@ -696,16 +674,10 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
 
     #Reorganize count data by Site, Wetland Pond, Year, and Species
-    if(species=="YCHUB"){
-      newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                         site=count$site,y=count$YCHUB,include=count$include,pond.name=count$pond_name)
+    newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
+                         site=count$site,y=count$BSHINER,include=count$include,
+                       onrefuge=count$onrefuge,pond.name=count$pond_name)
       countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-    }else if(species=="BSHINER"){
-      newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                         site=count$site,y=count$BSHINER,include=count$include,pond.name=count$pond_name)
-      countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-    }
-
 
     #Filter
     countdat1<-countdata %>% filter(include == 1 & onrefuge == 1)
@@ -721,7 +693,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     #Define and create 4 dimensional array
     #Read observed count data into 4-d array
     y=array(as.numeric(countdat1$y),c(nsite,nrep))
-
 
     print("Executing JAGS model to assess relationships with select habitat variables. This may take several minutes to hours.",quote=FALSE)
 
@@ -797,8 +768,9 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     nc=3; nt=1; nb=15000; ni=75000
 
     #Call JAGS
-    out2<-jags(ndata,inits,parameters.to.save=params,model.file=modelFilename,n.chains=nc,
-               n.burnin=nb,n.thin=nt,n.iter=ni,parallel=TRUE,n.cores=nc,DIC=TRUE)
+    out2<-jags(ndata,inits,parameters.to.save=params,model.file=modelFilename,
+               n.chains=nc,n.burnin=nb,n.thin=nt,n.iter=ni,parallel=TRUE,
+               n.cores=nc,DIC=TRUE)
 
     #Create Wetland pond labels
     pond.name<-rep(as.character(unique(unlist(sort(countdat$pond_name)))))
@@ -906,30 +878,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     res2<-rbind(res2.N,res2.D,res2.R)
 
 
-    if(species=="YCHUB"){
-
-      #Capture and Write results to working directory (R Data Files)
-      write.csv(res2,"YaquiChubSHabitatModelParameters.csv",row.names=F)
-
-      plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
-        geom_point(size=4)+
-        geom_vline(aes(xintercept=0.0),color="black",size=1)+
-        geom_errorbarh(aes(xmin=Lower,xmax=Upper),height=.2,size=1)+
-        facet_wrap(~Parameter,ncol=2,scales="free_x")+
-        guides(colour="none")+
-        theme_bw()+
-        xlab("Parameter Estimate")+
-        ylab("")+
-        theme(axis.text=element_text(size=12),
-              axis.title=element_text(size=16),
-              strip.text.x=element_text(size=12),
-              panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank())
-      print(plot)
-      ggsave("YaquiChubWetlandPondModelParameterFigure.tiff",plot=plot,
-             width=12,height=7,dpi=300)
-    }else if(species=="BSHINER"){
-      #Capture and Write results to working directory (R Data Files)
+    #Capture and Write results to working directory (R Data Files)
       write.csv(res2,"BeautifulShinerHabitatModelParameters.csv",row.names=F)
 
       plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
@@ -949,16 +898,15 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       print(plot)
       ggsave("BeautifulShinerWetlandPondModelParameterFigure.tiff",plot=plot,width=12,
              height=7,dpi=300)
-    }
+
     print("Results for the Habitat Model Model are saved and stored in your working directory.",quote=FALSE)
   }
 
   print("Executing JAGS model to assess relationships with select Management variables. This may take several minutes to hours.",quote=FALSE)
 
-
-
-
-
+################################################################################
+################################################################################
+################################################################################
 
   if(species=="YCHUB"){
     #Add pname field to count, mgmt, and hab .csv files
@@ -969,15 +917,10 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
 
     #Reorganize count data by Site, Wetland Pond, Year, and Species
-    if(species=="YCHUB"){
+
       newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
                          site=count$site,y=count$YCHUB,include=count$include,pond.name=count$pond_name)
       countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-    }else if(species=="BSHINER"){
-      newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                         site=count$site,y=count$BSHINER,include=count$include,pond.name=count$pond_name)
-      countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-    }
 
 
     #Filter
@@ -1166,7 +1109,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   res2<-rbind(res2.N,res2.R)
 
 
-  if(species=="YCHUB"){
+
 
     #Capture and Write results to working directory (R Data Files)
     write.csv(res2,"YaquiChubManagementStockingParameters.csv",row.names=F)
@@ -1188,33 +1131,8 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     print(plot)
     ggsave("YaquiChubWetlandManagementStockingParameterFigure.tiff",plot=plot,
            width=12,height=7,dpi=300)
-  }else if(species=="BSHINER"){
-    #Capture and Write results to working directory (R Data Files)
-    write.csv(res2,"BeautifulShinerManagementStockingParameters.csv",row.names=F)
 
-    plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
-      geom_point(size=4)+
-      geom_vline(aes(xintercept=0.0),color="black",size=1)+
-      geom_errorbarh(aes(xmin=Lower,xmax=Upper),height=.2,size=1)+
-      facet_wrap(~Parameter,ncol=2,scales="free_x")+
-      guides(colour="none")+
-      theme_bw()+
-      xlab("Parameter Estimate")+
-      ylab("")+
-      theme(axis.text=element_text(size=12),
-            axis.title=element_text(size=16),
-            strip.text.x=element_text(size=12),
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank())
-    print(plot)
-    ggsave("BeautifulShinerWetlandManagementStockingParameterFigure.tiff",plot=plot,width=12,
-           height=7,dpi=300)
-  }
   print("Results of the Management Model (Stocking) are saved and stored in your working directory.",quote=FALSE)
-
-
-
-
 
 
   #Define model file name and create JAGS model to assess relationships with
@@ -1349,7 +1267,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   res2<-rbind(res2.N,res2.R)
 
 
-  if(species=="YCHUB"){
+
 
     #Capture and Write results to working directory (R Data Files)
     write.csv(res2,"YaquiChubManagementRemovedParameters.csv",row.names=F)
@@ -1371,28 +1289,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     print(plot)
     ggsave("YaquiChubWetlandManagementRemovedParameterFigure.tiff",plot=plot,
            width=12,height=7,dpi=300)
-  }else if(species=="BSHINER"){
-    #Capture and Write results to working directory (R Data Files)
-    write.csv(res2,"BeautifulShinerManagementRemovedParameters.csv",row.names=F)
 
-    plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
-      geom_point(size=4)+
-      geom_vline(aes(xintercept=0.0),color="black",size=1)+
-      geom_errorbarh(aes(xmin=Lower,xmax=Upper),height=.2,size=1)+
-      facet_wrap(~Parameter,ncol=2,scales="free_x")+
-      guides(colour="none")+
-      theme_bw()+
-      xlab("Parameter Estimate")+
-      ylab("")+
-      theme(axis.text=element_text(size=12),
-            axis.title=element_text(size=16),
-            strip.text.x=element_text(size=12),
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank())
-    print(plot)
-    ggsave("BeautifulShinerWetlandManagementRemovedParameterFigure.tiff",plot=plot,width=12,
-           height=7,dpi=300)
-  }
   print("Results of the Management Model (Removed) are saved and stored in your working directory.",quote=FALSE)
 
   }else if(species=="BSHINER"){
@@ -1404,15 +1301,11 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
 
     #Reorganize count data by Site, Wetland Pond, Year, and Species
-    if(species=="YCHUB"){
-      newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                         site=count$site,y=count$YCHUB,include=count$include,pond.name=count$pond_name)
+    newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
+                         site=count$site,y=count$BSHINER,include=count$include,onrefuge=count$onrefuge,
+                       pond.name=count$pond_name)
       countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-    }else if(species=="BSHINER"){
-      newdat<-data.frame(pname=count$pname,year=count$yr,day=count$day,
-                         site=count$site,y=count$BSHINER,include=count$include,pond.name=count$pond_name)
-      countdata<-newdat[order(newdat$day,newdat$pname,newdat$year,newdat$site),]
-    }
+
 
 
     #Filter
@@ -1600,30 +1493,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     res2<-rbind(res2.N,res2.R)
 
 
-    if(species=="YCHUB"){
-
-      #Capture and Write results to working directory (R Data Files)
-      write.csv(res2,"YaquiChubManagementStockingParameters.csv",row.names=F)
-
-      plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
-        geom_point(size=4)+
-        geom_vline(aes(xintercept=0.0),color="black",size=1)+
-        geom_errorbarh(aes(xmin=Lower,xmax=Upper),height=.2,size=1)+
-        facet_wrap(~Parameter,ncol=2,scales="free_x")+
-        guides(colour="none")+
-        theme_bw()+
-        xlab("Parameter Estimate")+
-        ylab("")+
-        theme(axis.text=element_text(size=12),
-              axis.title=element_text(size=16),
-              strip.text.x=element_text(size=12),
-              panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank())
-      print(plot)
-      ggsave("YaquiChubWetlandManagementStockingParameterFigure.tiff",plot=plot,
-             width=12,height=7,dpi=300)
-    }else if(species=="BSHINER"){
-      #Capture and Write results to working directory (R Data Files)
+    #Capture and Write results to working directory (R Data Files)
       write.csv(res2,"BeautifulShinerManagementStockingParameters.csv",row.names=F)
 
       plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
@@ -1643,7 +1513,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       print(plot)
       ggsave("BeautifulShinerWetlandManagementStockingParameterFigure.tiff",plot=plot,width=12,
              height=7,dpi=300)
-    }
+
     print("Results of the Management Model (Stocking) are saved and stored in your working directory.",quote=FALSE)
 
 
@@ -1779,29 +1649,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     res2<-rbind(res2.N,res2.R)
 
 
-    if(species=="YCHUB"){
-
-      #Capture and Write results to working directory (R Data Files)
-      write.csv(res2,"YaquiChubManagementRemovedParameters.csv",row.names=F)
-
-      plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
-        geom_point(size=4)+
-        geom_vline(aes(xintercept=0.0),color="black",size=1)+
-        geom_errorbarh(aes(xmin=Lower,xmax=Upper),height=.2,size=1)+
-        facet_wrap(~Parameter,ncol=2,scales="free_x")+
-        guides(colour="none")+
-        theme_bw()+
-        xlab("Parameter Estimate")+
-        ylab("")+
-        theme(axis.text=element_text(size=12),
-              axis.title=element_text(size=16),
-              strip.text.x=element_text(size=12),
-              panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank())
-      print(plot)
-      ggsave("YaquiChubWetlandManagementRemovedParameterFigure.tiff",plot=plot,
-             width=12,height=7,dpi=300)
-    }else if(species=="BSHINER"){
       #Capture and Write results to working directory (R Data Files)
       write.csv(res2,"BeautifulShinerManagementRemovedParameters.csv",row.names=F)
 
@@ -1822,7 +1669,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       print(plot)
       ggsave("BeautifulShinerWetlandManagementRemovedParameterFigure.tiff",plot=plot,width=12,
              height=7,dpi=300)
-    }
+
     print("Results of the Management Model (Removed) are saved and stored in your working directory.",quote=FALSE)
 
 
