@@ -122,7 +122,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
       for(t in 1:nyear){
       y[i,j,k,t]~dbin(q[i,j,k,t],N[i,k,t])
       #Detection probabilities
-      q[i,j,k,t]~dbeta(10,9) #Slightly informative prior
+      q[i,j,k,t]~dbeta(2,4) #Slightly informative prior
       #logit(q[i,j,k,t])<-alpha + alpha_veg*veg[i,k,t]
       }}}}
       for(k in 1:npond){
@@ -153,6 +153,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   out<-jags(jags.data,jags.inits,parameters.to.save=jags.params,
             model.file=modelFilename,n.chains=nc,
             n.iter=ni,n.burnin=nb,n.thin=nt,parallel=TRUE,verbose=TRUE)
+
 
   #Create Year labels
   yrlab<-seq(min(count$year),max(count$year),by=1)
