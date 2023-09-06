@@ -270,7 +270,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   newhab<-data.frame(pond_name=hab$pond_name,rep=hab$day,year=hab$year,site=hab$site,
                      pH=hab$pH,wtemp=hab$wtemp,
                      doxygen=hab$doxygen,wcond=hab$wcond,
-                     ntu=hab$ntu,algal=hab$algal,veg=hab$veg,
+                     veg=hab$veg,
                      wdepth=hab$wdepth,include=hab$include)
   #Filter
   habdat1<-newhab %>% filter(include == 1)
@@ -285,8 +285,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
                       wtemp=as.numeric(habdata$wtemp),
                       doxygen=as.numeric(habdata$doxygen),
                       wcond=as.numeric(habdata$wcond),
-                      ntu=as.numeric(habdata$ntu),
-                      algal=as.numeric(habdata$algal),
                       veg=as.numeric(habdata$veg),
                       wdepth=as.numeric(habdata$wdepth),
                       yr = as.numeric(habdata$yr),
@@ -326,10 +324,10 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
   wcond2=rowMeans(wcond,na.rm=TRUE)
 
   #Turbidity
-  ntu=scale(habdata$ntu)
-  ntu=array(ntu,c(nsite,2))
+  #ntu=scale(habdata$ntu)
+  #ntu=array(ntu,c(nsite,2))
 
-  ntu2=rowMeans(ntu,na.rm=TRUE)
+  #ntu2=rowMeans(ntu,na.rm=TRUE)
 
   #Algae concentration
   #algal=scale(habdata$algal)
@@ -591,7 +589,7 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     newhab<-data.frame(pond_name=hab$pond_name,rep=hab$day,year=hab$year,site=hab$site,
                        pH=hab$pH,wtemp=hab$wtemp,
                        doxygen=hab$doxygen,wcond=hab$wcond,
-                       ntu=hab$ntu,algal=hab$algal,veg=hab$veg,
+                       veg=hab$veg,
                        wdepth=hab$wdepth,include=hab$include,onrefuge=hab$onrefuge)
     #Filter
     habdat1<-newhab %>% filter(include == 1 & onrefuge == 1)
@@ -606,8 +604,6 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
                         wtemp=as.numeric(habdata$wtemp),
                         doxygen=as.numeric(habdata$doxygen),
                         wcond=as.numeric(habdata$wcond),
-                        ntu=as.numeric(habdata$ntu),
-                        algal=as.numeric(habdata$algal),
                         veg=as.numeric(habdata$veg),
                         wdepth=as.numeric(habdata$wdepth),
                         yr = as.numeric(habdata$yr),
@@ -647,10 +643,10 @@ countmix<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
     wcond2=rowMeans(wcond,na.rm=TRUE)
 
     #Turbidity
-    ntu=scale(habdata$ntu)
-    ntu=array(ntu,c(nsite,2))
+    #ntu=scale(habdata$ntu)
+    #ntu=array(ntu,c(nsite,2))
 
-    ntu2=rowMeans(ntu,na.rm=TRUE)
+    #ntu2=rowMeans(ntu,na.rm=TRUE)
 
     #Algae concentration
     #algal=scale(habdata$algal)
