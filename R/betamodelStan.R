@@ -184,7 +184,7 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
 
     #Reorganize habitat data by Site, Wetland Pond, and Year
     newhab<-data.frame(pname=hab$pname,year=hab$yr,site=hab$site,pH=hab$pH,wtemp=hab$wtemp,
-                       doxygen=hab$doxygen,wcond=hab$wcond,ntu=hab$ntu,algal=hab$algal,veg=hab$veg,
+                       doxygen=hab$doxygen,wcond=hab$wcond,veg=hab$veg,
                        wdepth=hab$wdepth,include=hab$include)
 
     #Reorder habitat data
@@ -193,7 +193,6 @@ betamod<-function(count,mgmt,hab,species=c("YCHUB","BSHINER")){
                         pH=as.numeric(habdata$pH),
                         wtemp=as.numeric(habdata$wtemp),doxygen=as.numeric(habdata$doxygen),
                         wcond=as.numeric(habdata$wcond),
-                        ntu=as.numeric(habdata$ntu),algal=as.numeric(habdata$algal),
                         veg=as.numeric(habdata$veg),wdepth=as.numeric(habdata$wdepth))
 
     habdata<-setnafill(habdata, type = "locf")
