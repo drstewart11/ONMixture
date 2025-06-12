@@ -18,4 +18,14 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/drstewart11/ONMixture
 Issues: https://github.com/drstewart11/ONMixture/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.2
+Imports:
+  BART,
+  caret,
+  data.table,
+  dplyr,
+  mice,
+  ggplot2,
+  jagsUI,
+  tidyr,
+  parallel

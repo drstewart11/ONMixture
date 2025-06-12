@@ -8,11 +8,6 @@
 #' @return List with BART model output, selected variables, and PDP plots
 #' @export
 run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source, kfold = 5) {
-  library(dplyr)
-  library(data.table)
-  library(mice)
-  library(BART)
-  library(caret)
 
   if (!(species %in% c("YCHUB", "BSHINER"))) stop("Species must be 'YCHUB' or 'BSHINER'")
 
@@ -66,7 +61,6 @@ run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source, kfold 
   best_subset <- NULL
   all_subsets <- unlist(lapply(1:length(full_vars), function(k) combn(full_vars, k, simplify = FALSE)), recursive = FALSE)
 
-  library(parallel)
   cv_results <- lapply(all_subsets, function(subset_vars) {
     folds <- createFolds(y, k = kfold, list = TRUE)
     rmse_vals <- numeric(kfold)
@@ -125,9 +119,3 @@ run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source, kfold 
               aligned_data = aligned_data,
               figure_file = output_filename))
 }
-
-
-
-run_species_bart(count, mgmt, hab, species = "YCHUB", source, kfold = 5)
-
-
