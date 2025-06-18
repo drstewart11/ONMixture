@@ -20,7 +20,7 @@ countmix<-function(count,mgmt,hab,source,species=c("YCHUB","BSHINER")){
   #pname is a numeric wetland pond field
   #yr is a numeric year field
 
-  count <- ypond
+  count <- count
   count$yr<-as.numeric(as.factor(count$year))
 
   # Number of survey years for each pond
