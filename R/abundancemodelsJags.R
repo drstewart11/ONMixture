@@ -1427,8 +1427,7 @@ if(species=="YCHUB"){
                       bshinerrem=mgmt$BSHINER_removed,ytoprem=mgmt$YTOP_removed,
                       ychubstock=mgmt$YCHUB_stocked,
                       bshinerstock=mgmt$BSHINER_stocked,
-                      ytopstock=mgmt$YTOP_stocked,include=mgmt$include,BShinerTimeSinceStocking = mgmt$BShinerTimeSinceStocking,
-                      YChubTimeSinceStocking = mgmt$YChubTimeSinceStocking)
+                      ytopstock=mgmt$YTOP_stocked,include=mgmt$include)
 
   #Filter
   mgmtdat1<-newmgmt %>% filter(include == 1)
@@ -1440,7 +1439,7 @@ if(species=="YCHUB"){
 
   #Expand data.frame
   mgmtdat<-mgmtdata %>% group_by(pname,year,ychubrem,bshinerrem,ytoprem,
-                                 ychubstock,bshinerstock,ytopstock, BShinerTimeSinceStocking, YChubTimeSinceStocking) %>% expand(sites = 1:10)
+                                 ychubstock,bshinerstock,ytopstock) %>% expand(sites = 1:10)
 
   mgmtdat<-mgmtdat[order(mgmtdat$pname),]
 
@@ -1617,7 +1616,7 @@ if(species=="YCHUB"){
 
   #Expand data.frame
   mgmtdat<-mgmtdata %>% group_by(pname,year,ychubrem,bshinerrem,ytoprem,
-                                 ychubstock,bshinerstock,ytopstock, BShinerTimeSinceStocking, YChubTimeSinceStocking) %>% expand(sites = 1:10)
+                                 ychubstock,bshinerstock,ytopstock) %>% expand(sites = 1:10)
 
   mgmtdat<-mgmtdat[order(mgmtdat$pname),]
 
