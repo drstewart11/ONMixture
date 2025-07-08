@@ -1605,9 +1605,7 @@ if(species=="YCHUB"){
                       bshinerstock=mgmt$BSHINER_stocked,
                       ytopstock=mgmt$YTOP_stocked,
                       onrefuge=mgmt$onrefuge,
-                      include=mgmt$include,
-                      BShinerTimeSinceStocking = mgmt$BShinerTimeSinceStocking,
-                      YChubTimeSinceStocking = mgmt$YChubTimeSinceStocking)
+                      include=mgmt$include)
 
   #Filter
   mgmtdat1<-newmgmt %>% filter(include == 1 & onrefuge == 1)
