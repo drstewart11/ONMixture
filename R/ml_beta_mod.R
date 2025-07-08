@@ -89,7 +89,7 @@ run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source_path, k
 
   message("Selected predictors: ", paste(best_subset, collapse = ", "))
 
-  X <- as.data.frame(aligned_data[, ..best_subset])
+  X <- as.data.frame(aligned_data[, best_subset, drop = FALSE])
   bart_model <- gbart(x.train = X, y.train = y)
   varimp <- bart_model$varcount.mean
 
