@@ -70,9 +70,9 @@ run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source_path, k
     for (i in seq_along(folds)) {
       test_idx <- folds[[i]]
       train_idx <- setdiff(seq_along(y), test_idx)
-      X_train <- as.data.frame(aligned_data[train_idx, ..subset_vars])
+      X_train <- aligned_data[train_idx, subset_vars, drop = FALSE]
       y_train <- y[train_idx]
-      X_test <- as.data.frame(aligned_data[test_idx, ..subset_vars])
+      X_test <- aligned_data[test_idx, subset_vars, drop = FALSE]
       y_test <- y[test_idx]
       fit <- suppressMessages(suppressWarnings(
         gbart(x.train = X_train, y.train = y_train, x.test = X_test)
