@@ -20,7 +20,10 @@ run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source_path, k
 
   count$y <- if (species == "YCHUB") as.numeric(count$YC_small) else as.numeric(count$BS_small)
   newdat <- data.table(pname = count$pname, year = count$yr, site = count$site, y = count$y)
-  countdata <- newdat[, .(y = mean(y, na.rm = TRUE)), by = .(pname, year, site)]
+
+  countdata <- newdat %>%
+    group_by(pname, year, site) %>%
+    summarise(y = mean(y, na.rm = TRUE), .groups = "drop")
 
   habdata <- data.table(
     pname = hab$pname, year = hab$yr, site = hab$site,
