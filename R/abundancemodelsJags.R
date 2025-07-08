@@ -4,7 +4,7 @@
 #' @param hab Data frame with habitat variables including pond_name, year, site, pH, wtemp, doxygen, wcond, veg, wdepth
 #' @param species Character string: "YCHUB" or "BSHINER"
 #' @export
-countmix<-function(count,mgmt,hab,source,species=c("YCHUB","BSHINER")){
+countmix<-function(count,mgmt,hab,source_path,species=c("YCHUB","BSHINER")){
   #Error bounds
   if(length(species)>1|missing(species))stop("'species' must contain
                                              only one value",call.=FALSE)
@@ -14,7 +14,6 @@ countmix<-function(count,mgmt,hab,source,species=c("YCHUB","BSHINER")){
                         data",call.=FALSE)
   if(missing(hab))stop("must specify hab (habitat) activity data",call=FALSE)
   options(warn=-1)
-
 
   #Add pname field to count, mgmt, and hab .csv files
   #pname is a numeric wetland pond field
@@ -418,8 +417,8 @@ GRresults<-data.frame(WetlandPond=pond.name2,
 if(species=="YCHUB"){
 
   #Capture and Write results to working directory (R Data Files)
-  write.csv(NQresults, paste0(source, "/YaquiChubPondAbundanceDetection.csv"), row.names=F)
-  write.csv(GRresults, paste0(source, "/YaquiChubPondPopGrowthRate.csv"), row.names=F)
+  write.csv(NQresults, paste0(source_path, "/YaquiChubPondAbundanceDetection.csv"), row.names=F)
+  write.csv(GRresults, paste0(source_path, "/YaquiChubPondPopGrowthRate.csv"), row.names=F)
 
   plot<-ggplot(NQresults,aes(as.factor(Year),Pop_estimate,colour=factor(WetlandPond)))+
     geom_point(size=4)+
@@ -434,12 +433,12 @@ if(species=="YCHUB"){
           axis.title=element_text(size=16),
           strip.text.x=element_text(size=12))
   print(plot)
-  ggsave(filename = file.path(source, "/YaquiChubWetlandPondAbundanceFigure.tiff"),plot=plot,
+  ggsave(filename = file.path(source_path, "/YaquiChubWetlandPondAbundanceFigure.tiff"),plot=plot,
          width=20,height=10,dpi=300)
 }else if(species=="BSHINER"){
   #Capture and Write results to working directory (R Data Files)
-  write.csv(NQresults,paste0(source,"/BeautifulShinerPondAbundanceDetection.csv"),row.names=F)
-  write.csv(GRresults,paste0(source, "/BeautifulShinerPondPopGrowthRate.csv"),row.names=F)
+  write.csv(NQresults,paste0(source_path,"/BeautifulShinerPondAbundanceDetection.csv"),row.names=F)
+  write.csv(GRresults,paste0(source_path, "/BeautifulShinerPondPopGrowthRate.csv"),row.names=F)
 
   plot<-ggplot(NQresults,aes(as.factor(Year),Pop_estimate,colour=factor(WetlandPond)))+
     geom_point(size=4)+
@@ -454,7 +453,7 @@ if(species=="YCHUB"){
           axis.title=element_text(size=16),
           strip.text.x=element_text(size=12))
   print(plot)
-  ggsave(filename = file.path(source, "BeautifulShinerWetlandPondAbundanceFigure.tiff"),plot=plot,
+  ggsave(filename = file.path(source_path, "BeautifulShinerWetlandPondAbundanceFigure.tiff"),plot=plot,
          width=20,height=10,dpi=300)
 }
 
@@ -559,9 +558,6 @@ if(species=="YCHUB"){
   wcond_centered <- center_4D_array(wcond_4D)
   veg_centered <- center_4D_array(veg_4D)
   wdepth_centered <- center_4D_array(wdepth_4D)
-
-
-
 
 
   # Function to average over the 'rep' dimension while handling NAs
@@ -938,7 +934,7 @@ if(species=="YCHUB"){
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank())
   print(plot)
-  ggsave(paste0(source, "/YaquiChubWetlandPondModelParameterFigure.tiff"),plot=plot,
+  ggsave(paste0(source_path, "/YaquiChubWetlandPondModelParameterFigure.tiff"),plot=plot,
          width=12,height=7,dpi=300)
 
   print("Results for the Habitat Model Model are saved and stored in your working directory.",quote=FALSE)
@@ -1039,9 +1035,6 @@ if(species=="YCHUB"){
   wdepth_centered <- center_4D_array(wdepth_4D)
 
 
-
-
-
   # Function to average over the 'rep' dimension while handling NAs
   average_over_rep <- function(array_4d) {
     apply(array_4d, c(1, 3, 4), function(x) {
@@ -1099,8 +1092,6 @@ if(species=="YCHUB"){
   wcond_3D_centered <- center_4D_array(wcond_3D)
   veg_3D_centered <- center_4D_array(veg_3D)
   wdepth_3D_centered <- center_4D_array(wdepth_3D)
-
-
 
   # Format count data
   count$yr<-as.numeric(as.factor(count$year))
@@ -1360,7 +1351,7 @@ if(species=="YCHUB"){
 
 
   #Capture and Write results to working directory (R Data Files)
-  write.csv(res2,paste0(source,"/BeautifulShinerHabitatModelParameters.csv"),row.names=F)
+  write.csv(res2,paste0(source_path,"/BeautifulShinerHabitatModelParameters.csv"),row.names=F)
 
   plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
     geom_point(size=4)+
@@ -1377,7 +1368,7 @@ if(species=="YCHUB"){
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank())
   print(plot)
-  ggsave(paste0(source,"/BeautifulShinerWetlandPondModelParameterFigure.tiff"),plot=plot,width=12,
+  ggsave(paste0(source_path,"/BeautifulShinerWetlandPondModelParameterFigure.tiff"),plot=plot,width=12,
          height=7,dpi=300)
 
   print("Results for the Habitat Model Model are saved and stored in your working directory.",quote=FALSE)
@@ -1579,7 +1570,7 @@ if(species=="YCHUB"){
 
 
   #Capture and Write results to working directory (R Data Files)
-  write.csv(res2,paste0(source, "/YaquiChubManagementStockingParameters.csv"),row.names=F)
+  write.csv(res2,paste0(source_path, "/YaquiChubManagementStockingParameters.csv"),row.names=F)
 
   plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
     geom_point(size=4)+
@@ -1596,7 +1587,7 @@ if(species=="YCHUB"){
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank())
   print(plot)
-  ggsave(paste0(source, "/YaquiChubWetlandManagementStockingParameterFigure.tiff"),plot=plot,
+  ggsave(paste0(source_path, "/YaquiChubWetlandManagementStockingParameterFigure.tiff"),plot=plot,
          width=12,height=7,dpi=300)
 
   print("Results of the Management Model (Removed) are saved and stored in your working directory.",quote=FALSE)
@@ -1772,7 +1763,7 @@ if(species=="YCHUB"){
 
 
   #Capture and Write results to working directory (R Data Files)
-  write.csv(res2,paste0(source, "/BeautifulShinerManagementStockingParameters.csv"),row.names=F)
+  write.csv(res2,paste0(source_path, "/BeautifulShinerManagementStockingParameters.csv"),row.names=F)
 
   plot<-ggplot(res2,aes(Mean,Variable,colour=factor(Variable)))+
     geom_point(size=4)+
@@ -1789,7 +1780,7 @@ if(species=="YCHUB"){
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank())
   print(plot)
-  ggsave(paste0(source, "/BeautifulShinerWetlandManagementStockingParameterFigure.tiff"),plot=plot,width=12,
+  ggsave(paste0(source_path, "/BeautifulShinerWetlandManagementStockingParameterFigure.tiff"),plot=plot,width=12,
          height=7,dpi=300)
 
 

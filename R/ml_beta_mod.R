@@ -7,7 +7,7 @@
 #' @param kfold Integer. Number of folds for cross-validation-based variable selection (default = 5)
 #' @return List with BART model output, selected variables, and PDP plots
 #' @export
-run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source, kfold = 5) {
+run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source_path, kfold = 5) {
 
   if (!(species %in% c("YCHUB", "BSHINER"))) stop("Species must be 'YCHUB' or 'BSHINER'")
 
@@ -104,7 +104,7 @@ run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source, kfold 
   }
 
   # Save PDP figure to file by species
-  output_dir <- file.path(source)
+  output_dir <- file.path(source_path)
   if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
   output_filename <- file.path(output_dir, paste0("BART_PDP_", species, ".tiff"))
   tiff(filename = output_filename, width = 8, height = 8, units = "in", res = 300)
