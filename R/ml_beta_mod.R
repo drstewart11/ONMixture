@@ -111,7 +111,7 @@ run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source_path, k
   if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
   output_filename <- file.path(output_dir, paste0("BART_PDP_", species, ".tiff"))
   tiff(filename = output_filename, width = 8, height = 8, units = "in", res = 300)
-  par(mfrow = c(2, 2))
+  par(mfrow = c(3, 2))
   lapply(best_subset, generate_pdp)
   par(mfrow = c(1, 1))
   dev.off()
