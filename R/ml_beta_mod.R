@@ -77,7 +77,7 @@ run_species_bart <- function(count, mgmt, hab, species = "YCHUB", source_path, k
       fit <- suppressMessages(suppressWarnings(
         gbart(x.train = X_train, y.train = y_train, x.test = X_test)
       ))
-      preds <- rowMeans(fit$yhat.test)
+      preds <- colMeans(fit$yhat.test)
       rmse_vals[i] <- sqrt(mean((y_test - preds)^2))
     }
     list(vars = subset_vars, rmse = mean(rmse_vals))
